@@ -55,7 +55,8 @@ var appSettings = {
   WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
   
   // API Management App Settings
-  ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings.serviceName)
+  ApiManagement__gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings.serviceName)
+  ApiManagement__oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
 }
 
 //=============================================================================
