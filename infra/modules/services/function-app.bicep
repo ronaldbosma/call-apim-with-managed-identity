@@ -106,6 +106,13 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
       netFrameworkVersion: functionAppSettings.netFrameworkVersion
+
+      // Allow CORS requests from https://portal.azure.com so we can trigger the function from the Azure Portal.
+      cors: {
+        allowedOrigins: [
+          'https://portal.azure.com'
+        ]
+      }
     }
     httpsOnly: true
   }
