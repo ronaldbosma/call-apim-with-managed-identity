@@ -2,8 +2,8 @@
     <inbound>
         <base />
 
-        <!-- Forward requests to the protected. -->
-        <set-backend-service base-url="https://apim-oauth-sample-sdc-jgo3s.azure-api.net/protected" />
+        <!-- Forward requests to the Protected API. -->
+        <set-backend-service base-url="{{apim-gateway-url}}/protected" />
 
         <!-- Use the API Management system-assigned managed identity to get a JWT token. -->
         <authentication-managed-identity resource="{{oauth-target-resource}}" />

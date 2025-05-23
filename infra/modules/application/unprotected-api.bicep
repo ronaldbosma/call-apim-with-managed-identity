@@ -3,6 +3,12 @@
 //=============================================================================
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import * as helpers from '../../functions/helpers.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -25,6 +31,15 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 //=============================================================================
 
 // Named Values
+
+resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'apim-gateway-url'
+  parent: apiManagementService
+  properties: {
+    displayName: 'apim-gateway-url'
+    value: helpers.getApiManagementGatewayUrl(apiManagementServiceName)
+  }
+}
 
 resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'oauth-target-resource'
@@ -83,4 +98,9 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       urlTemplate: '/'
     }
   }
+
+  dependsOn: [
+    apimGatewayUrlNamedValue
+    oauthTargetResourceNamedValue
+  ]
 }
