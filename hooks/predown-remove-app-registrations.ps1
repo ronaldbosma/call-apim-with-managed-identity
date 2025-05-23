@@ -48,4 +48,3 @@ function Remove-ApplicationAndServicePrincipal($uniqueName){
 
 
 Remove-ApplicationAndServicePrincipal $env:ENTRA_ID_APIM_APP_REGISTRATION_NAME
-Remove-ApplicationAndServicePrincipal $env:ENTRA_ID_CLIENT_APP_REGISTRATION_NAME
