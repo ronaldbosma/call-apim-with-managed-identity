@@ -16,15 +16,27 @@ public class CallProtectedApiFunction
     [Function(nameof(CallProtectedApiFunction))]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
     {
-        using var httpClient = _httpClientFactory.CreateClient("apim");
-        var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
-        var result = await httpClient.SendAsync(request);
-
-        return new ContentResult
+        try
         {
-            StatusCode = (int?)result?.StatusCode,
-            Content = result?.Content is not null ? await result.Content.ReadAsStringAsync() : string.Empty,
-            ContentType = result?.Content?.Headers.ContentType?.ToString() ?? "text/plain"
-        };
+            using var httpClient = _httpClientFactory.CreateClient("apim");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/protected");
+            var result = await httpClient.SendAsync(request);
+
+            return new ContentResult
+            {
+                StatusCode = (int?)result?.StatusCode,
+                Content = result?.Content is not null ? await result.Content.ReadAsStringAsync() : string.Empty,
+                ContentType = result?.Content?.Headers.ContentType?.ToString() ?? "text/plain"
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ContentResult
+            {
+                StatusCode = StatusCodes.Status500InternalServerError,
+                Content = ex.ToString(),
+                ContentType = "text/plain"
+            };
+        }
     }
 }
