@@ -12,6 +12,10 @@ hooks:
       run: ./hooks/predown-remove-law.ps1
       interactive: true
 services:
+  functionApp:
+    project: ./src/functionApp/FunctionApp
+    host: function
+    language: csharp
   logicApp:
     project: ./src/logicApp/Workflows
     host: function
