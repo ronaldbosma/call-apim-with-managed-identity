@@ -2,13 +2,32 @@
     "definition": {
         "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
         "actions": {
+            "HTTP": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "@{parameters('api-management-gateway-url')}/protected",
+                    "method": "GET"
+                },
+                "runAfter": {},
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
             "Response": {
                 "type": "Response",
                 "kind": "Http",
                 "inputs": {
-                    "statusCode": 200
+                    "statusCode": "@outputs('HTTP')?['statusCode']",
+                    "body": "@body('HTTP')"
                 },
-                "runAfter": {}
+                "runAfter": {
+                    "HTTP": [
+                        "SUCCEEDED",
+                        "FAILED"
+                    ]
+                }
             }
         },
         "contentVersion": "1.0.0.0",
