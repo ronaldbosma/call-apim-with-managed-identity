@@ -134,8 +134,8 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
 
 // Assign app roles to the system-assigned managed identity of the Logic App
 
-module assignAppRolesToApimSystemAssignedIdentity '../entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToApimSystemAssignedIdentity'
+module assignAppRolesToLogicAppSystemAssignedIdentity '../entra-id/assign-app-roles.bicep' = {
+  name: 'assignAppRolesToLogicAppSystemAssignedIdentity'
   scope: subscription()
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
