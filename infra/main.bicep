@@ -1,6 +1,6 @@
 //=============================================================================
-// Protect API Management with OAuth
-// Source: https://github.com/ronaldbosma/protect-apim-with-oauth
+// Call API Management with Managed Identity
+// Source: https://github.com/ronaldbosma/call-apim-with-managed-identity
 //=============================================================================
 
 targetScope = 'subscription'
@@ -70,7 +70,7 @@ var storageAccountName = getResourceName('storageAccount', environmentName, loca
 
 var tags = {
   'azd-env-name': environmentName
-  'azd-template': 'ronaldbosma/protect-apim-with-oauth'
+  'azd-template': 'ronaldbosma/call-apim-with-managed-identity'
 }
 
 //=============================================================================

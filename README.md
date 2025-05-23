@@ -1,4 +1,4 @@
-# Protect API Management with OAuth
+# Call API Management with Managed Identity
 
 > [!IMPORTANT]  
 > This azd template is still under development.
@@ -32,7 +32,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
 
     ```cmd
-    azd init --template ronaldbosma/protect-apim-with-oauth
+    azd init --template ronaldbosma/call-apim-with-managed-identity
     ```
 
     When prompted, specify the name of the environment, for example, `oauth`. The maximum length is 32 characters.
