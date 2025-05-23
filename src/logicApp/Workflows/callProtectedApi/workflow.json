@@ -2,32 +2,41 @@
     "definition": {
         "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
         "actions": {
-            "HTTP": {
-                "type": "Http",
-                "inputs": {
-                    "uri": "@{parameters('api-management-gateway-url')}/protected",
-                    "method": "GET"
-                },
-                "runAfter": {},
-                "runtimeConfiguration": {
-                    "contentTransfer": {
-                        "transferMode": "Chunked"
-                    }
-                }
-            },
             "Response": {
                 "type": "Response",
                 "kind": "Http",
                 "inputs": {
-                    "statusCode": "@outputs('HTTP')?['statusCode']",
-                    "body": "@body('HTTP')"
+                    "statusCode": "@coalesce(outputs('HTTP')?['statusCode'], 500)",
+                    "body": "@if(equals(outputs('HTTP')?['statusCode'],null), result('Scope'), body('HTTP'))"
                 },
                 "runAfter": {
-                    "HTTP": [
+                    "Scope": [
                         "SUCCEEDED",
                         "FAILED"
                     ]
                 }
+            },
+            "Scope": {
+                "type": "Scope",
+                "actions": {
+                    "HTTP": {
+                        "type": "Http",
+                        "inputs": {
+                            "uri": "@{parameters('api-management-gateway-url')}/protected",
+                            "method": "GET",
+                            "authentication": {
+                                "type": "ManagedServiceIdentity",
+                                "audience": "@{parameters('api-management-oauth-target-resource')}"
+                            }
+                        },
+                        "runtimeConfiguration": {
+                            "contentTransfer": {
+                                "transferMode": "Chunked"
+                            }
+                        }
+                    }
+                },
+                "runAfter": {}
             }
         },
         "contentVersion": "1.0.0.0",

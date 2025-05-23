@@ -59,6 +59,7 @@ var appSettings = {
 
   // API Management App Settings
   ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings.serviceName)
+  ApiManagement_oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
 }
 
 //=============================================================================

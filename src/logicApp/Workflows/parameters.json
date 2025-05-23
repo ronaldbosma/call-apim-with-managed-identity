@@ -2,5 +2,9 @@
   "api-management-gateway-url": {
     "type": "String",
     "value": "@appsetting('ApiManagement_gatewayUrl')"
+  },
+  "api-management-oauth-target-resource": {
+    "type": "String",
+    "value": "@appsetting('ApiManagement_oauthTargetResource')"
   }
 }
