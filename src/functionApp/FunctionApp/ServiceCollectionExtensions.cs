@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace FunctionApp
 {
@@ -12,10 +12,19 @@ namespace FunctionApp
             services.AddApplicationInsightsTelemetryWorkerService()
                     .ConfigureFunctionsApplicationInsights();
 
-            services.AddHttpClient("apim", client =>
-            {
-                client.BaseAddress = new Uri(configuration["ApiManagement_gatewayUrl"] ?? throw new ConfigurationErrorsException("Setting ApiManagement_gatewayUrl not specified"));
-            });
+            services.AddOptions<ApiManagementOptions>()
+                    .Bind(configuration.GetSection(ApiManagementOptions.SectionKey))
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+
+            services.AddScoped<AzureCredentialsAuthorizationHandler>();
+
+            services.AddHttpClient("apim", (sp, client) =>
+                    {
+                        var options = sp.GetRequiredService<IOptions<ApiManagementOptions>>().Value;
+                        client.BaseAddress = new Uri(options.GatewayUrl);
+                    })
+                    .AddHttpMessageHandler<AzureCredentialsAuthorizationHandler>();
 
             return services;
         }
