@@ -132,3 +132,15 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
     newAppSettings: appSettings
   }
 }
+
+
+// Assign app roles to the system-assigned managed identity of the Function App
+
+module assignAppRolesToFunctionAppSystemAssignedIdentity '../entra-id/assign-app-roles.bicep' = {
+  name: 'assignAppRolesToFunctionAppSystemAssignedIdentity'
+  scope: subscription()
+  params: {
+    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    clientServicePrincipalId: functionApp.identity.principalId
+  }
+}
