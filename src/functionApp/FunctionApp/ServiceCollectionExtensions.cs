@@ -12,10 +12,9 @@ namespace FunctionApp
             services.AddApplicationInsightsTelemetryWorkerService()
                     .ConfigureFunctionsApplicationInsights();
 
-            services.AddOptions<ApiManagementOptions>()
-                    .Bind(configuration.GetSection(ApiManagementOptions.SectionKey))
-                    .ValidateDataAnnotations()
-                    .ValidateOnStart();
+            services.AddOptionsWithValidateOnStart<ApiManagementOptions>()
+                    .BindConfiguration(ApiManagementOptions.SectionKey)
+                    .ValidateDataAnnotations();
 
             services.AddScoped<AzureCredentialsAuthorizationHandler>();
 
