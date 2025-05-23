@@ -23,7 +23,7 @@
                         "type": "Http",
                         "inputs": {
                             "uri": "@{parameters('api-management-gateway-url')}/protected",
-                            "method": "GET",
+                            "method": "@coalesce(triggerBody()?['httpMethod'], 'GET')",
                             "authentication": {
                                 "type": "ManagedServiceIdentity",
                                 "audience": "@{parameters('api-management-oauth-target-resource')}"
@@ -44,7 +44,17 @@
         "triggers": {
             "When_a_HTTP_request_is_received": {
                 "type": "Request",
-                "kind": "Http"
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "httpMethod": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
             }
         }
     },
