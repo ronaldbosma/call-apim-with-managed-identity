@@ -16,6 +16,7 @@ if ($LASTEXITCODE -ne 0) {
 
 
 if ($env:AZURE_SUBSCRIPTION_ID -and $env:AZURE_RESOURCE_GROUP -and $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME) {
+    Write-Host "Deleting Log Analytics workspace $($env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME)"
     az monitor log-analytics workspace delete --subscription $env:AZURE_SUBSCRIPTION_ID --resource-group $env:AZURE_RESOURCE_GROUP --workspace-name $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME --force --yes
 } else {
     Write-Host "One or more required environment variables are missing. Skipping log analytics workspace deletion."
