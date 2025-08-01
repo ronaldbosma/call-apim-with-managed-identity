@@ -67,7 +67,6 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Assign app roles to the system-assigned managed identity of the API Management service
 
 module assignAppRolesToApimSystemAssignedIdentity '../entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToApimSystemAssignedIdentity'
   scope: subscription()
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName

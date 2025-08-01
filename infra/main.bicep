@@ -75,7 +75,6 @@ var tags = {
 //=============================================================================
 
 module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
-  name: 'apimAppRegistration'
   params: {
     tenantId: subscription().tenantId
     tags: tags
@@ -91,7 +90,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
 }
 
 module storageAccount 'modules/services/storage-account.bicep' = {
-  name: 'storageAccount'
   scope: resourceGroup
   params: {
     location: location
@@ -101,7 +99,6 @@ module storageAccount 'modules/services/storage-account.bicep' = {
 }
 
 module appInsights 'modules/services/app-insights.bicep' = {
-  name: 'appInsights'
   scope: resourceGroup
   params: {
     location: location
@@ -111,7 +108,6 @@ module appInsights 'modules/services/app-insights.bicep' = {
 }
 
 module apiManagement 'modules/services/api-management.bicep' = {
-  name: 'apiManagement'
   scope: resourceGroup
   params: {
     location: location
@@ -125,7 +121,6 @@ module apiManagement 'modules/services/api-management.bicep' = {
 }
 
 module functionApp 'modules/services/function-app.bicep' = {
-  name: 'functionApp'
   scope: resourceGroup
   params: {
     location: location
@@ -142,7 +137,6 @@ module functionApp 'modules/services/function-app.bicep' = {
 }
 
 module logicApp 'modules/services/logic-app.bicep' = {
-  name: 'logicApp'
   scope: resourceGroup
   params: {
     location: location
@@ -163,7 +157,6 @@ module logicApp 'modules/services/logic-app.bicep' = {
 //=============================================================================
 
 module protectedApi 'modules/application/protected-api.bicep' = {
-  name: 'protectedApi'
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
@@ -176,7 +169,6 @@ module protectedApi 'modules/application/protected-api.bicep' = {
 }
 
 module unprotectedApi 'modules/application/unprotected-api.bicep' = {
-  name: 'unprotectedApi'
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName

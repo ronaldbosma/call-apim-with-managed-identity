@@ -123,7 +123,6 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
 //        to prevent other (manually) created app settings from being removed.
 
 module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
-  name: 'setLogicAppSettings'
   params: {
     siteName: logicAppSettings.logicAppName
     currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
@@ -135,7 +134,6 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
 // Assign app roles to the system-assigned managed identity of the Logic App
 
 module assignAppRolesToLogicAppSystemAssignedIdentity '../entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToLogicAppSystemAssignedIdentity'
   scope: subscription()
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
