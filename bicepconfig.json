@@ -57,6 +57,9 @@
         "no-unused-existing-resources": {
           "level": "error"
         },
+        "no-unused-imports": {
+          "level": "error"
+        },
         "no-unused-params": {
           "level": "error"
         },
