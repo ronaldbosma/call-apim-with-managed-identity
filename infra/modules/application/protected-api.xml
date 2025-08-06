@@ -19,8 +19,7 @@
             Verify that the JWT token was issued by the correct tenant and app registration (audience)
             and that the client has the correct role in the roles claim.
         -->
-        <validate-jwt header-name="Authorization">
-            <openid-config url="https://login.microsoftonline.com/{{tenant-id}}/v2.0/.well-known/openid-configuration" />
+        <validate-azure-ad-token tenant-id="{{tenant-id}}">
             <audiences>
                 <audience>{{oauth-audience}}</audience>
             </audiences>
@@ -29,7 +28,7 @@
                     <value>@((string)context.Variables["role"])</value>
                 </claim>
             </required-claims>
-        </validate-jwt>
+        </validate-azure-ad-token>
 
         <!-- 
             Return the JWT token that was received in the Authorization header.
