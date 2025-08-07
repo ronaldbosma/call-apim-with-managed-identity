@@ -2,8 +2,9 @@
 # Test requests
 #=============================================================================
 
-# Replace <your-api-management-service-name> with your actual API Management service name
+# Replace the <...> values with your actual API Management service name and Function App hostname
 @apimHostname = <your-api-management-service-name>.azure-api.net
+@functionAppHostname = <your-function-app-name>.azurewebsites.net
 
 
 #=============================================================================
@@ -22,3 +23,23 @@ POST https://{{apimHostname}}/unprotected HTTP/1.1
 
 # Call DELETE on Unprotected API (should return 401 Unauthorized because managed identity does not have the Sample.Delete permission)
 DELETE https://{{apimHostname}}/unprotected HTTP/1.1
+
+###
+
+
+#=============================================================================
+# Test requests for the Azure Function
+#=============================================================================
+
+# Call GET on Azure Function
+GET https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
+
+###
+
+# Call POST on Azure Function
+POST https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
+
+###
+
+# Call DELETE on Azure Function
+DELETE https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
