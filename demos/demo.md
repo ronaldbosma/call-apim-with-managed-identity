@@ -68,9 +68,9 @@ Note that none of the managed identities receive the `Sample.Delete` role, which
 
 Execute the requests in the "Test requests for the Unprotected API on API Management" section of the `tests.http` file:
 
-1. GET request - Should succeed (200 OK) - requires `Sample.Read` role
-1. POST request - Should succeed (200 OK) - requires `Sample.Write` role
-1. DELETE request - Should fail (401 Unauthorized) - requires `Sample.Delete` role (not assigned)
+1. GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+1. POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+1. DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The HTTP method used on the unprotected API directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
@@ -95,9 +95,9 @@ The policy:
 
 Execute the requests in the "Test requests for the Azure Function" section of the `tests.http` file:
 
-1. GET request - Should succeed (200 OK) - requires `Sample.Read` role
-1. POST request - Should succeed (200 OK) - requires `Sample.Write` role
-1. DELETE request - Should fail (401 Unauthorized) - requires `Sample.Delete` role (not assigned)
+1. GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+1. POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+1. DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The HTTP method used to call the Azure Function directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
@@ -133,9 +133,9 @@ The Azure Function uses a custom `HttpMessageHandler` to automatically add OAuth
 
 Execute the requests in the "Test requests for the Logic App workflow" section of the `tests.http` file:
 
-1. POST with `"httpMethod": "GET"` - Should succeed (200 OK) - requires `Sample.Read` role
-1. POST with `"httpMethod": "POST"` - Should succeed (200 OK) - requires `Sample.Write` role
-1. POST with `"httpMethod": "DELETE"` - Should fail (401 Unauthorized) - requires `Sample.Delete` role (not assigned)
+1. POST with `"httpMethod": "GET"` - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+1. POST with `"httpMethod": "POST"` - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+1. POST with `"httpMethod": "DELETE"` - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The `httpMethod` property in the request body determines which HTTP method the workflow uses to call the protected API, and the protected API determines the required role based on that HTTP method.
 
