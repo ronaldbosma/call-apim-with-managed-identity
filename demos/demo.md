@@ -74,9 +74,11 @@ Execute the requests in the "Test requests for the Unprotected API on API Manage
 
 The HTTP method used on the unprotected API directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
-Here's a sequence diagram that shows the flow for the GET request:
+Here's a sequence diagram that shows the flow for all three requests (GET, POST, DELETE):
 
 ![Sequence Diagram - APIM to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-apim-to-apim.png)
+
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
 
 **Review the policy implementation**
 
@@ -101,9 +103,11 @@ Execute the requests in the "Test requests for the Azure Function" section of th
 
 The HTTP method used to call the Azure Function directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
-Here's a sequence diagram that shows the flow for the GET request:
+Here's a sequence diagram that shows the flow for all three requests (GET, POST, DELETE):
 
 ![Sequence Diagram - Function to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-function-to-apim.png)
+
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
 
 **Review the implementation**
 
@@ -139,9 +143,11 @@ Execute the requests in the "Test requests for the Logic App workflow" section o
 
 The `httpMethod` property in the request body determines which HTTP method the workflow uses to call the protected API, and the protected API determines the required role based on that HTTP method.
 
-Here's a sequence diagram that shows the flow for the request where `httpMethod` is set to `GET`:
+Here's a sequence diagram that shows the flow for all three requests (GET, POST, DELETE):
 
 ![Sequence Diagram - Workflow to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-workflow-to-apim.png)
+
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
 
 **Review the workflow configuration**
 
