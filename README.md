@@ -40,8 +40,8 @@ The repository consists of the following files and directories:
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
 ├── src                        
-│   ├── functionApp            [ .NET 9 Function App that calls the protected API ]
-│   └── logicApp               [ Logic App workflows ]
+│   ├── functionApp            [ Azure Function that calls the protected API ]
+│   └── logicApp               [ Logic App workflow that calls the protected API ]
 ├── tests                      
 │   └── tests.http             [ HTTP requests to test the deployed resources ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
