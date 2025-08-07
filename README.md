@@ -21,6 +21,34 @@ This template deploys the following resources:
 The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. This approach provides better security and eliminates the need to manage and rotate secrets.
 
 
+## Contents
+
+The repository consists of the following files and directories:
+
+```
+├── demos                      [ Demo guide(s) ]
+├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
+├── images                     [ Images used in the README and demo guide ]
+├── infra                      [ Infrastructure As Code files ]
+│   ├── functions              [ Bicep user-defined functions ]
+│   ├── modules                
+│   │   ├── application        [ Protected and unprotected APIs ]
+│   │   ├── entra-id           [ Modules for all Entra ID resources ]
+│   │   └── services           [ Modules for all Azure services ]
+│   │   └── shared             [ Shared modules ]
+│   ├── types                  [ Bicep user-defined types ]
+│   ├── main.bicep             [ Main infrastructure file ]
+│   └── main.parameters.json   [ Parameters file ]
+├── src                        
+│   ├── functionApp            [ .NET 9 Function App that calls the protected API ]
+│   └── logicApp               [ Logic App workflows ]
+├── tests                      
+│   └── tests.http             [ HTTP requests to test the deployed resources ]
+├── azure.yaml                 [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json           [ Bicep configuration file ]
+```
+
+
 ## Getting Started
 
 ### Prerequisites  
