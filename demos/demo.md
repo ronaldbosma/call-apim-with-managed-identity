@@ -78,7 +78,7 @@ Here's a sequence diagram that shows the flow for all three requests (GET, POST,
 
 ![Sequence Diagram - APIM to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-apim-to-apim.png)
 
-Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests. If you execute the GET and POST requests multiple times, you'll notice that the `IssuedAt` value in the response doesn't change, demonstrating that API Management automatically caches access tokens for improved performance.
 
 **Review the policy implementation**
 
@@ -107,7 +107,7 @@ Here's a sequence diagram that shows the flow for all three requests (GET, POST,
 
 ![Sequence Diagram - Function to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-function-to-apim.png)
 
-Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests. If you execute the GET and POST requests multiple times, you'll notice that the `IssuedAt` value in the response doesn't change, demonstrating that `DefaultAzureCredential` automatically handles token caching and renewal.
 
 **Review the implementation**
 
@@ -147,7 +147,7 @@ Here's a sequence diagram that shows the flow for all three requests (GET, POST,
 
 ![Sequence Diagram - Workflow to APIM](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-workflow-to-apim.png)
 
-Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests.
+Note how the access token is retrieved during the first GET request and then cached for subsequent POST and DELETE requests. If you execute the GET and POST requests multiple times, you'll notice that the `IssuedAt` value in the response doesn't change, demonstrating that Logic Apps automatically cache and renew managed identity tokens.
 
 **Review the workflow configuration**
 
@@ -171,8 +171,3 @@ For all scenarios, you should observe:
   - Failed requests return details about the error that occurred
 
 This demonstrates how role-based access control works with managed identities - each identity only has the minimum required permissions.
-
-
-### Token caching behavior
-
-If you execute any request multiple times, you'll notice that the `IssuedAt` value in the response doesn't change. This shows that all three approaches cache access tokens effectively.
