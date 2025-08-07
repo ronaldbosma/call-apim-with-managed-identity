@@ -6,17 +6,19 @@ An Azure Developer CLI (`azd`) template using Bicep that shows how to call Azure
 
 This template deploys the following resources:
 
+![Overview](images/diagrams-overview.png)
+
 - **Azure API Management** service with two APIs:
-  - **Protected API**: A backend API that requires managed identity authentication
-  - **Unprotected API**: A public API that calls the protected API using managed identity
+  - **Protected API**: A backend API that's protected with OAuth
+  - **Unprotected API**: A public API that calls the protected API using the system-assigned managed identity of API Management
 
-- **Azure Function App**: A .NET 9 function that calls the protected API using managed identity
+- **Azure Function App**: A .NET 9 function that calls the protected API using the system-assigned managed identity of the Function App
 
-- **Azure Logic App (Standard)**: A workflow that calls the protected API using managed identity
+- **Azure Logic App (Standard)**: A workflow that calls the protected API using the system-assigned managed identity of the Logic App
 
 - **Supporting resources**: Application Insights, Log Analytics workspace, Storage Account, and Entra ID app registrations
 
-The template demonstrates how to authenticate between Azure services using managed identities instead of connection strings, secrets, or certificates. This approach provides better security and eliminates the need to manage and rotate secrets.
+The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. This approach provides better security and eliminates the need to manage and rotate secrets.
 
 
 ## Getting Started
