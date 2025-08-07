@@ -1,0 +1,24 @@
+#=============================================================================
+# Test requests
+#=============================================================================
+
+# Replace <your-api-management-service-name> with your actual API Management service name
+@apimHostname = <your-api-management-service-name>.azure-api.net
+
+
+#=============================================================================
+# Test requests for the Unprotected API on API Management
+#=============================================================================
+
+# Call GET on Unprotected API
+GET https://{{apimHostname}}/unprotected HTTP/1.1
+
+###
+
+# Call POST on Unprotected API
+POST https://{{apimHostname}}/unprotected HTTP/1.1
+
+###
+
+# Call DELETE on Unprotected API (should return 401 Unauthorized because managed identity does not have the Sample.Delete permission)
+DELETE https://{{apimHostname}}/unprotected HTTP/1.1
