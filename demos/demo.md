@@ -39,9 +39,9 @@ Before you start testing the scenarios, prepare the test file to use your deploy
         - Copy the value of the "HTTP URL" from the trigger details
         - Use this URL to replace `<your-call-protected-api-workflow-url>` in the tests.http file
 
-### Review the API policies
+### Review the configuration
 
-Let's start by understanding what makes the APIs work with managed identity authentication.
+Before diving into the scenarios, let's understand how managed identity authentication works in this setup.
 
 **Protected API policy**
 
