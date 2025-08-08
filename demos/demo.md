@@ -46,11 +46,13 @@ Before diving into the scenarios, let's understand how managed identity authenti
 **Protected API policy**
 
 The protected API uses the `validate-azure-ad-token` policy to enforce OAuth authentication. This policy:
-- Validates that the JWT token was issued by the correct Entra ID tenant
-- Checks that the token's audience matches the backend app registration 
-- Requires specific roles (`Sample.Read`, `Sample.Write`, or `Sample.Delete`) based on the HTTP method
 
 You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/application/protected-api.xml).
+
+**App registration**
+
+The [apim-app-registration.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/entra-id/apim-app-registration.bicep) file creates an Entra ID app registration for the protected API. 
+This app registration defines the Application ID URI (used as the OAuth audience) and the available app roles (`Sample.Read`, `Sample.Write`, `Sample.Delete`).
 
 **Role assignment configuration**
 
