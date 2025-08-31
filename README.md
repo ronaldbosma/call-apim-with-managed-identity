@@ -20,6 +20,8 @@ This template deploys the following resources:
 
 The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. This approach provides better security and eliminates the need to manage and rotate secrets.
 
+> If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
+
 
 ## Contents
 
