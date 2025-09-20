@@ -33,6 +33,25 @@ param name string
 param identifierUri string
 
 //=============================================================================
+// Variables
+//=============================================================================
+
+var appRoles = [
+  {
+    name: 'Sample.Read'
+    description: 'Sample read application role'
+  }
+  {
+    name: 'Sample.Write'
+    description: 'Sample write application role'
+  }
+  {
+    name: 'Sample.Delete'
+    description: 'Sample delete application role'
+  }
+]
+
+//=============================================================================
 // Resources
 //=============================================================================
 
@@ -48,32 +67,14 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
   }
 
-  appRoles: [
-    {
-      id: guid(tenantId, 'Sample.Read')
-      description: 'Sample read application role'
-      displayName: 'Sample.Read'
-      value: 'Sample.Read'
-      allowedMemberTypes: [ 'Application' ]
-      isEnabled: true
-    }
-    {
-      id: guid(tenantId, 'Sample.Write')
-      description: 'Sample write application role'
-      displayName: 'Sample.Write'
-      value: 'Sample.Write'
-      allowedMemberTypes: [ 'Application' ]
-      isEnabled: true
-    }
-    {
-      id: guid(tenantId, 'Sample.Delete')
-      description: 'Sample delete application role'
-      displayName: 'Sample.Delete'
-      value: 'Sample.Delete'
-      allowedMemberTypes: [ 'Application' ]
-      isEnabled: true
-    }
-  ]
+  appRoles: [for role in appRoles: {
+    id: guid(tenantId, role.name)
+    description: role.description
+    displayName: role.name
+    value: role.name
+    allowedMemberTypes: [ 'Application' ]
+    isEnabled: true
+  }]
 
   owners: {
     relationships: [
