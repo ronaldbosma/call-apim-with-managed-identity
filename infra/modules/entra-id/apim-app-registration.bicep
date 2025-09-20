@@ -56,8 +56,6 @@ var appRoles = [
 //=============================================================================
 
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  tags: helpers.flattenTags(tags)
-  
   uniqueName: name
   displayName: name
 
@@ -75,12 +73,9 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
     allowedMemberTypes: [ 'Application' ]
     isEnabled: true
   }]
-
-  owners: {
-    relationships: [
-      deployer().objectId
-    ]
-  }
+  
+  // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
+  tags: concat(helpers.flattenTags(tags), ['HideApp'])
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
