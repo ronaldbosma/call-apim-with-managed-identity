@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="7">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="8">
   <diagram name="overview" id="aE0DW7iNFTxmuB1C0EMy">
     <mxGraphModel dx="1426" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -704,6 +704,60 @@
         </mxCell>
         <mxCell id="yvBF6-putU5mNHR0nAHk-0" value="Logic App&lt;div&gt;Workflow&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/internet_of_things/Logic_Apps.svg;fontStyle=1;labelBackgroundColor=default;imageBackground=default;" parent="3Ob4VKSCy7E2SWzim5_z-1" vertex="1">
           <mxGeometry x="224" y="135" width="60" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="overview-workflow-simplified" id="WYx_LHDsLHsBgdCEY5wH">
+    <mxGraphModel dx="1188" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-0" />
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-1" parent="ESsdt9xR2p4GkEReNPl7-0" />
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-2" value="Client" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;fontStyle=0;labelBackgroundColor=default;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="50" y="140" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-3" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="410" y="290" width="150" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-4" value="Microsoft Entra ID" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Entra_Identity.svg;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="451" y="250" width="68" height="60.440000000000005" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-5" value="API Management&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(app registration)&lt;/span&gt;&lt;/div&gt;" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="460" y="345" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-6" value="1. calls resource&lt;div&gt;without authentication&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="ESsdt9xR2p4GkEReNPl7-1" source="ESsdt9xR2p4GkEReNPl7-2" target="o3uZ1qRlrGY8dIveaZm1-0">
+          <mxGeometry x="-0.0566" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="120" y="30" as="sourcePoint" />
+            <mxPoint x="220" y="165" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-7" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="410" y="60" width="150" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-8" value="Protected API" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+JiN4YTsgICAgPHBhdGggZmlsbD0iIzU3YTMwMCIgZD0iTTAgMjAuODRoMTkuNTV2OC4zMkgweiIvPiYjeGE7ICAgIDxwYXRoIGZpbGw9IiM1OWI0ZDkiIGQ9Ik00MS42OCAyMC44NGgxMC4yNnY4LjMySDQxLjY4eiIvPiYjeGE7ICAgIDxjaXJjbGUgZmlsbD0iIzU3YTMwMCIgcj0iOS40NiIgY3k9IjI1IiBjeD0iMjAuMTIiLz4mI3hhOyAgICA8cGF0aCBmaWxsPSIjNTliNGQ5IiBkPSJNMjAuMTIuNDh2MTAuOTZhMSAxIDAgMCAxIDAgMjcuMTR2MTAuOTZhMSAxIDAgMCAwIDAtNDkuMDVaIi8+JiN4YTs8L3N2Zz4=;imageBackground=none;fontStyle=1" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="460" y="140" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-9" value="3. calls API&lt;div&gt;with Bearer token&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="ESsdt9xR2p4GkEReNPl7-1" source="o3uZ1qRlrGY8dIveaZm1-0" target="ESsdt9xR2p4GkEReNPl7-8">
+          <mxGeometry x="-0.304" y="2" relative="1" as="geometry">
+            <mxPoint x="510" y="290" as="targetPoint" />
+            <mxPoint as="offset" />
+            <mxPoint x="288" y="165" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-10" value="2. retrieves&amp;nbsp;&lt;div&gt;token using&lt;/div&gt;&lt;div&gt;managed&amp;nbsp;&lt;/div&gt;&lt;div&gt;identity for&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.016;entryY=0.492;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="ESsdt9xR2p4GkEReNPl7-1" source="o3uZ1qRlrGY8dIveaZm1-0" target="ESsdt9xR2p4GkEReNPl7-5">
+          <mxGeometry x="-0.2513" y="1" relative="1" as="geometry">
+            <mxPoint x="284.08797653958936" y="195" as="sourcePoint" />
+            <mxPoint as="offset" />
+            <mxPoint x="460" y="396" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ESsdt9xR2p4GkEReNPl7-11" value="API Management" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/app_services/API_Management_Services.svg;imageBackground=default;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="452.5" y="30" width="65" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o3uZ1qRlrGY8dIveaZm1-0" value="Logic App&lt;div&gt;Workflow&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/internet_of_things/Logic_Apps.svg;fontStyle=1;labelBackgroundColor=default;imageBackground=default;" vertex="1" parent="ESsdt9xR2p4GkEReNPl7-1">
+          <mxGeometry x="220" y="135" width="60" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
