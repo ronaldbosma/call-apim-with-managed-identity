@@ -21,24 +21,6 @@ The deployed resources follow the naming convention: `<resource-type>-<environme
 
 ## 2. What you can demo after deployment
 
-### Setup
-
-Before you start testing the scenarios, prepare the test file to use your deployed resources:
-
-1. Open the [tests.http](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/tests/tests.http) file in Visual Studio Code.
-
-1. Replace the placeholders with your actual values:
-   - `<your-api-management-service-name>` with the name of your API Management service
-   - `<your-function-app-name>` with your Function App hostname  
-   - `<your-call-protected-api-workflow-url>` with your Logic App workflow URL  
-
-     To get the Logic App workflow URL:
-        - Navigate to your Logic App resource in the Azure portal
-        - Open the `call-protected-api-workflow` workflow
-        - Click on the HTTP trigger (first step in the workflow)
-        - Copy the value of the "HTTP URL" from the trigger details
-        - Use this URL to replace `<your-call-protected-api-workflow-url>` in the tests.http file
-
 ### Review the configuration
 
 Before diving into the scenarios, let's understand how managed identity authentication works in this setup.
@@ -68,11 +50,12 @@ Note that none of the managed identities receive the `Sample.Delete` role, which
 
 **Execute the scenario**
 
-Execute the requests in the "Test requests for the Unprotected API on API Management" section of the `tests.http` file:
-
-1. GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
-1. POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
-1. DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
+1. Open [tests.apim.http](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/tests/tests.apim.http) in Visual Studio Code.
+1. Replace `<your-api-management-service-name>` with the name of your API Management service.
+1. Execute the requests in the file:
+   - GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+   - POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+   - DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The HTTP method used on the unprotected API directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
@@ -97,11 +80,12 @@ The policy:
 
 **Execute the scenario**
 
-Execute the requests in the "Test requests for the Azure Function" section of the `tests.http` file:
-
-1. GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
-1. POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
-1. DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
+1. Open [tests.function.http](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/tests/tests.function.http) in Visual Studio Code.
+2. Replace `<your-function-app-name>` with your Function App hostname.
+3. Execute the requests in the file:
+   - GET request - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+   - POST request - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+   - DELETE request - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The HTTP method used to call the Azure Function directly matches the operation called on the protected API, and the protected API determines the required role based on the HTTP method.
 
@@ -137,11 +121,18 @@ The Azure Function uses a custom `HttpMessageHandler` to automatically add OAuth
 
 **Execute the scenario**
 
-Execute the requests in the "Test requests for the Logic App workflow" section of the `tests.http` file:
-
-1. POST with `"httpMethod": "GET"` - Should succeed (200 OK) - the protected API requires `Sample.Read` role
-1. POST with `"httpMethod": "POST"` - Should succeed (200 OK) - the protected API requires `Sample.Write` role
-1. POST with `"httpMethod": "DELETE"` - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
+1. Open [tests.workflow.http](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/tests/tests.workflow.http) in Visual Studio Code.
+2. Replace `<your-call-protected-api-workflow-url>` with your Logic App workflow URL.  
+   To get the Logic App workflow URL:
+   - Navigate to your Logic App resource in the Azure portal
+   - Open the `call-protected-api-workflow` workflow
+   - Click on the HTTP trigger (first step in the workflow)
+   - Copy the value of the "HTTP URL" from the trigger details
+   - Use this URL to replace `<your-call-protected-api-workflow-url>` in the file
+3. Execute the requests in the file:
+   - POST with `"httpMethod": "GET"` - Should succeed (200 OK) - the protected API requires `Sample.Read` role
+   - POST with `"httpMethod": "POST"` - Should succeed (200 OK) - the protected API requires `Sample.Write` role
+   - POST with `"httpMethod": "DELETE"` - Should fail (401 Unauthorized) - the protected API requires `Sample.Delete` role (not assigned)
 
 The `httpMethod` property in the request body determines which HTTP method the workflow uses to call the protected API, and the protected API determines the required role based on that HTTP method.
 

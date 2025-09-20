@@ -1,0 +1,21 @@
+#=============================================================================
+# Test requests for the Azure Function
+#=============================================================================
+
+# Replace <your-function-app-name> with your actual Function App hostname
+@functionAppHostname = <your-function-app-name>.azurewebsites.net
+
+# Call GET on Azure Function
+GET https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
+
+###
+
+# Call POST on Azure Function
+POST https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
+
+###
+
+# Call DELETE on Azure Function
+DELETE https://{{functionAppHostname}}/api/CallProtectedApiFunction HTTP/1.1
+
+###

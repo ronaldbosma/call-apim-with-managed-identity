@@ -44,8 +44,7 @@ The repository consists of the following files and directories:
 ├── src                        
 │   ├── functionApp            [ Azure Function that calls the protected API ]
 │   └── logicApp               [ Logic App workflow that calls the protected API ]
-├── tests                      
-│   └── tests.http             [ HTTP requests to test the deployed resources ]
+├── tests                      [ Contains HTTP request files for testing different scenarios ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
 ```
