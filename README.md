@@ -64,8 +64,9 @@ Before you can deploy this template, make sure you have the following tools inst
 - [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
 - [npm CLI](https://nodejs.org/) 
   _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
-  _(This template has several hooks. See [this section](#hooks) for more information.)_
+- This template includes several hooks that run at different stages of the deployment process and require the following tools. For more details, see [Hooks](#hooks).
+  - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+  - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 **Required Permissions:**
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template
