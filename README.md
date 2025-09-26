@@ -23,33 +23,6 @@ The template demonstrates how to authenticate between Azure services using manag
 > If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
 
 
-## Contents
-
-The repository consists of the following files and directories:
-
-```
-├── demos                      [ Demo guide(s) ]
-├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
-├── images                     [ Images used in the README and demo guide ]
-├── infra                      [ Infrastructure As Code files ]
-│   ├── functions              [ Bicep user-defined functions ]
-│   ├── modules                
-│   │   ├── application        [ Protected and unprotected APIs ]
-│   │   ├── entra-id           [ Modules for all Entra ID resources ]
-│   │   └── services           [ Modules for all Azure services ]
-│   │   └── shared             [ Shared modules ]
-│   ├── types                  [ Bicep user-defined types ]
-│   ├── main.bicep             [ Main infrastructure file ]
-│   └── main.parameters.json   [ Parameters file ]
-├── src                        
-│   ├── functionApp            [ Azure Function that calls the protected API ]
-│   └── logicApp               [ Logic App workflow that calls the protected API ]
-├── tests                      [ Contains HTTP request files for testing different scenarios ]
-├── azure.yaml                 [ Describes the apps and types of Azure resources ]
-└── bicepconfig.json           [ Bicep configuration file ]
-```
-
-
 ## Getting Started
 
 ### Prerequisites  
@@ -111,6 +84,33 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 
 ```cmd
 azd down --purge
+```
+
+
+## Contents
+
+The repository consists of the following files and directories:
+
+```
+├── demos                      [ Demo guide(s) ]
+├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
+├── images                     [ Images used in the README and demo guide ]
+├── infra                      [ Infrastructure As Code files ]
+│   ├── functions              [ Bicep user-defined functions ]
+│   ├── modules                
+│   │   ├── application        [ Protected and unprotected APIs ]
+│   │   ├── entra-id           [ Modules for all Entra ID resources ]
+│   │   └── services           [ Modules for all Azure services ]
+│   │   └── shared             [ Shared modules ]
+│   ├── types                  [ Bicep user-defined types ]
+│   ├── main.bicep             [ Main infrastructure file ]
+│   └── main.parameters.json   [ Parameters file ]
+├── src                        
+│   ├── functionApp            [ Azure Function that calls the protected API ]
+│   └── logicApp               [ Logic App workflow that calls the protected API ]
+├── tests                      [ Contains HTTP request files for testing different scenarios ]
+├── azure.yaml                 [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json           [ Bicep configuration file ]
 ```
 
 
