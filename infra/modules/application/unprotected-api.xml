@@ -16,9 +16,6 @@
 
     <outbound>
         <base />
-        <set-header name="BackendRequestUrl" exists-action="override">
-            <value>@(context.Request.Url.ToString())</value>
-        </set-header>
     </outbound>
 
     <on-error>
