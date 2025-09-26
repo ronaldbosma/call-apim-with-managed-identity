@@ -70,10 +70,14 @@ Note how the access token is retrieved during the first GET request and then cac
 The unprotected API uses the `authentication-managed-identity` policy to automatically obtain an access token using API Management's system-assigned managed identity. You can see this simple but powerful implementation in [unprotected-api.xml](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/application/unprotected-api.xml).
 
 The policy:
-- Uses `set-backend-service` to forward requests to the protected API
+- Uses `set-backend-service` with `backend-id="localhost"` to forward requests to the protected API hosted on the same API Management instance
+- Uses `rewrite-uri` to change the path to `/protected`
 - Uses `authentication-managed-identity` to authenticate with the managed identity
 - The `oauth-target-resource` named value is configured with the `Application ID URI` of the app registration so the access token is requested for the correct protected resource
-- Adds debugging headers to show the backend request URL
+
+**Review the localhost backend configuration**
+
+The localhost backend is defined in [unprotected-api.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/application/unprotected-api.bicep). This backend enables the unprotected API to call other APIs hosted within the same API Management instance. The configuration uses the API Management service's public gateway URL as the backend URL and includes proper Host header configuration to ensure requests are routed correctly within the same APIM instance.
 
 
 ### Scenario 2: Azure Function calls protected API using its managed identity

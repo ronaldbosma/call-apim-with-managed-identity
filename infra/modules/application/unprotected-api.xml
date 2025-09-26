@@ -2,8 +2,9 @@
     <inbound>
         <base />
 
-        <!-- Forward requests to the Protected API. -->
-        <set-backend-service base-url="{{apim-gateway-url}}/protected" />
+        <!-- Forward requests to the Protected API hosted on this API Management instance. -->
+        <set-backend-service backend-id="localhost" />
+        <rewrite-uri template="protected" />
 
         <!-- Use the API Management system-assigned managed identity to get a JWT token. -->
         <authentication-managed-identity resource="{{oauth-target-resource}}" />
@@ -15,9 +16,6 @@
 
     <outbound>
         <base />
-        <set-header name="BackendRequestUrl" exists-action="override">
-            <value>@(context.Request.Url.ToString())</value>
-        </set-header>
     </outbound>
 
     <on-error>

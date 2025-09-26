@@ -3,12 +3,6 @@
 //=============================================================================
 
 //=============================================================================
-// Imports
-//=============================================================================
-
-import * as helpers from '../../functions/helpers.bicep'
-
-//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -32,15 +26,6 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 
 // Named Values
 
-resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'apim-gateway-url'
-  parent: apiManagementService
-  properties: {
-    displayName: 'apim-gateway-url'
-    value: helpers.getApiManagementGatewayUrl(apiManagementServiceName)
-  }
-}
-
 resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'oauth-target-resource'
   parent: apiManagementService
@@ -49,6 +34,35 @@ resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedVal
     value: oauthTargetResource
   }
 }
+
+// Backends
+
+resource localhostBackend 'Microsoft.ApiManagement/service/backends@2024-06-01-preview' = {
+  parent: apiManagementService
+  name: 'localhost'
+  properties: {
+    description: 'The localhost backend. Can be used to call other APIs hosted in the same API Management instance.'
+
+    // Note: This configuration uses the public gateway URL for the backend.
+    // For APIM instances running inside a VNet, you would typically use https://localhost as the backend URL.
+    url: apiManagementService.properties.gatewayUrl
+    protocol: 'http'
+    
+    // Note: The Host header configuration is only necessary when the backend URL is set to https://localhost.
+    // For public gateway URLs, this configuration can be omitted.
+    credentials : {
+      header: {
+        Host: [ parseUri(apiManagementService.properties.gatewayUrl).host ]
+      }
+    }
+    
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
+
 
 // API
 
@@ -70,6 +84,11 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       format: 'rawxml'
       value: loadTextContent('unprotected-api.xml')
     }
+
+    dependsOn: [
+      oauthTargetResourceNamedValue
+      localhostBackend
+    ]
   }
 
   resource getOperation 'operations' = {
@@ -98,9 +117,4 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       urlTemplate: '/'
     }
   }
-
-  dependsOn: [
-    apimGatewayUrlNamedValue
-    oauthTargetResourceNamedValue
-  ]
 }
