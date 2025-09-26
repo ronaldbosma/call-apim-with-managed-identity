@@ -84,6 +84,11 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       format: 'rawxml'
       value: loadTextContent('unprotected-api.xml')
     }
+
+    dependsOn: [
+      oauthTargetResourceNamedValue
+      localhostBackend
+    ]
   }
 
   resource getOperation 'operations' = {
@@ -112,9 +117,4 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       urlTemplate: '/'
     }
   }
-
-  dependsOn: [
-    oauthTargetResourceNamedValue
-    localhostBackend
-  ]
 }
