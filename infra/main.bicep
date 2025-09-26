@@ -60,7 +60,7 @@ var functionAppSettings = {
 var logicAppSettings = {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
-  netFrameworkVersion: 'v9.0'
+  netFrameworkVersion: 'v8.0'
 }
 
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
