@@ -6,13 +6,13 @@ namespace FunctionApp
 {
     internal class AzureCredentialsAuthorizationHandler : DelegatingHandler
     {
-        private readonly ApiManagementOptions _apimOptions;
         private readonly TokenCredential _tokenCredential;
+        private readonly ApiManagementOptions _apimOptions;
 
-        public AzureCredentialsAuthorizationHandler(IOptions<ApiManagementOptions> apimOptions, TokenCredential tokenCredential)
+        public AzureCredentialsAuthorizationHandler(TokenCredential tokenCredential, IOptions<ApiManagementOptions> apimOptions)
         {
-            _apimOptions = apimOptions.Value;
             _tokenCredential = tokenCredential;
+            _apimOptions = apimOptions.Value;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
