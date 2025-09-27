@@ -7,7 +7,7 @@ namespace FunctionApp
 {
     internal static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterDependencies(this IServiceCollection services, IConfigurationManager configuration)
+        public static IServiceCollection RegisterDependencies(this IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetryWorkerService()
                     .ConfigureFunctionsApplicationInsights();
