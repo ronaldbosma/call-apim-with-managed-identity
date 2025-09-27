@@ -103,8 +103,9 @@ Note how the access token is retrieved during the first GET request and then cac
 
 The Azure Function uses a custom `HttpMessageHandler` to automatically add OAuth tokens to outgoing requests:
 
-1. [AzureCredentialsAuthorizationHandler.cs](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/src/functionApp/FunctionApp/AzureCredentialsAuthorizationHandler.cs) - Contains the logic to retrieve access tokens using `DefaultAzureCredential`. This handler:
-   - Uses `DefaultAzureCredential` to authenticate with the managed identity
+1. [AzureCredentialsAuthorizationHandler.cs](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/src/functionApp/FunctionApp/AzureCredentialsAuthorizationHandler.cs) - Contains the logic to retrieve access tokens using an injected `TokenCredential`. This handler:
+   - Receives a `TokenCredential` instance through constructor dependency injection
+   - Uses the injected credential to authenticate with the managed identity
    - Requests an access token for the configured OAuth target resource, which is the `Application ID URI` of the app registration
    - Adds the token to the Authorization header of outgoing requests
 
@@ -115,6 +116,7 @@ The Azure Function uses a custom `HttpMessageHandler` to automatically add OAuth
    - Returns the response from the protected API
 
 1. [ServiceCollectionExtensions.cs](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/src/functionApp/FunctionApp/ServiceCollectionExtensions.cs) - The `RegisterDependencies` extension method configures the dependency injection container. It:
+   - Registers `DefaultAzureCredential` as a singleton `TokenCredential` implementation
    - Registers the `AzureCredentialsAuthorizationHandler` as a scoped service
    - Configures an HttpClient named "apim" with the API Management gateway URL
    - Adds the `AzureCredentialsAuthorizationHandler` to the HttpClient pipeline using `AddHttpMessageHandler`
