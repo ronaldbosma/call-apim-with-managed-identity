@@ -1,5 +1,6 @@
-﻿using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Configuration;
+﻿using Azure.Core;
+using Azure.Identity;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -16,8 +17,13 @@ namespace FunctionApp
                     .BindConfiguration(ApiManagementOptions.SectionKey)
                     .ValidateDataAnnotations();
 
-            services.AddScoped<AzureCredentialsAuthorizationHandler>();
+            // We're using DefaultAzureCredential which supports multiple authentication methods and picks the best one for the environment.
+            // For production, prefer a specific TokenCredential implementation such as ManagedIdentityCredential for improved performance and predictability.
+            // More info: https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication/best-practices?tabs=aspdotnet
+            services.AddSingleton<TokenCredential, DefaultAzureCredential>();
 
+            services.AddScoped<AzureCredentialsAuthorizationHandler>();
+            
             services.AddHttpClient("apim", (sp, client) =>
                     {
                         var options = sp.GetRequiredService<IOptions<ApiManagementOptions>>().Value;
