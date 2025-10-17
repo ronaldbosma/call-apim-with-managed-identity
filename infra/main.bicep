@@ -68,6 +68,7 @@ var storageAccountName = getResourceName('storageAccount', environmentName, loca
 var tags = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/call-apim-with-managed-identity'
+  SecurityControl: 'Ignore'
 }
 
 //=============================================================================
