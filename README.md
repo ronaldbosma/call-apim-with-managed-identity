@@ -23,6 +23,9 @@ The template demonstrates how to authenticate between Azure services using manag
 > [!NOTE]
 > If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
 
+> [!IMPORTANT]  
+> This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
+
 
 ## Getting Started
 
