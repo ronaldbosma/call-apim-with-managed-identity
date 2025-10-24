@@ -142,6 +142,43 @@ These PowerShell scripts are executed before the resources are removed.
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
 
 
+## Pipeline
+
+This template includes a GitHub Actions workflow that automates the build, deployment and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
+
+![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
+
+The pipeline consists of the following jobs:
+
+- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App.
+- **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Clean Up Resources**: This job removes all deployed Azure resources.  
+
+  By default, cleanup runs automatically after the deployment. This can be disabled via an input parameter when the workflow is triggered manually.
+
+  ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
+
+### Setting Up the Pipeline
+
+To set up the pipeline in your own repository, run the following command:
+
+```cmd
+azd pipeline config
+```
+
+Follow the instructions and choose either **Federated User Managed Identity (MSI + OIDC)** or **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline.
+
+For detailed guidance, refer to:
+- [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
+- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)
+
+> [!TIP]
+> By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
+
+> [!NOTE]
+> The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
+
+
 ## Troubleshooting
 
 ### API Management deployment failed because the service already exists in soft-deleted state
