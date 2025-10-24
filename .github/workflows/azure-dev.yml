@@ -107,7 +107,7 @@ jobs:
     needs: build-verify-package
     runs-on: ubuntu-latest
     outputs:
-      azd-environment-id: ${{ steps.get-outputs.outputs.azd-environment-id }}
+      azure-environment-id: ${{ steps.get-outputs.outputs.azure-environment-id }}
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
     
     steps:
@@ -164,10 +164,10 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        $azdEnvironmentId = azd env get-value "AZD_ENVIRONMENT_ID"
+        $azureEnvironmentId = azd env get-value "AZURE_ENV_ID"
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
         
-        echo "azd-environment-id=$azdEnvironmentId" >> $env:GITHUB_OUTPUT
+        echo "azure-environment-id=$azureEnvironmentId" >> $env:GITHUB_OUTPUT
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
 
 
@@ -214,5 +214,5 @@ jobs:
       env:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-        AZD_ENVIRONMENT_ID: ${{ needs.deploy.outputs.azd-environment-id }}
+        AZURE_ENV_ID: ${{ needs.deploy.outputs.azure-environment-id }}
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}

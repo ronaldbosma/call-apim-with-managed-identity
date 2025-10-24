@@ -189,7 +189,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 //=============================================================================
 
 // Return the azd environment id
-output AZD_ENVIRONMENT_ID string = azdEnvironmentId
+output AZURE_ENV_ID string = azdEnvironmentId
 
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName

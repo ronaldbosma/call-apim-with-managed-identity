@@ -9,7 +9,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$AzdEnvironmentId = $env:AZD_ENVIRONMENT_ID
+    [string]$AzureEnvironmentId = $env:AZURE_ENV_ID
 )
 
 # Validate required parameters
@@ -17,8 +17,8 @@ if ([string]::IsNullOrEmpty($SubscriptionId)) {
     throw "SubscriptionId parameter is required. Please provide it as a parameter or set the AZURE_SUBSCRIPTION_ID environment variable."
 }
 
-if ([string]::IsNullOrEmpty($AzdEnvironmentId)) {
-    throw "AzdEnvironmentId parameter is required. Please provide it as a parameter or set the AZD_ENVIRONMENT_ID environment variable."
+if ([string]::IsNullOrEmpty($AzureEnvironmentId)) {
+    throw "AzureEnvironmentId parameter is required. Please provide it as a parameter or set the AZURE_ENV_ID environment variable."
 }
 
 
@@ -30,7 +30,7 @@ if ($LASTEXITCODE -ne 0) {
 
 
 # Find all app registrations with the matching azd-env-id tag
-$targetTag = "azd-env-id: $AzdEnvironmentId"
+$targetTag = "azd-env-id: $AzureEnvironmentId"
 Write-Host "Looking for app registrations with tag '$targetTag'"
 
 $apps = az ad app list | ConvertFrom-Json | Where-Object { $_.tags -contains $targetTag }
