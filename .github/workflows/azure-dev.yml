@@ -224,7 +224,7 @@ jobs:
 
     - name: Run Integration Tests
       run: |
-        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+        dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
       env:
         # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
