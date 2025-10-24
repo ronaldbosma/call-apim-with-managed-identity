@@ -18,12 +18,14 @@ internal class TestConfiguration
         return new TestConfiguration
         {
             AzureApiManagementName = configuration.GetRequiredString("AZURE_API_MANAGEMENT_NAME"),
-            AzureFunctionAppName = configuration.GetRequiredString("AZURE_FUNCTION_APP_NAME")
+            AzureFunctionAppName = configuration.GetRequiredString("AZURE_FUNCTION_APP_NAME"),
+            AzureLogicAppName = configuration.GetRequiredString("AZURE_LOGIC_APP_NAME")
         };
     });
 
     public required string AzureApiManagementName { get; init; }
     public required string AzureFunctionAppName { get; init; }
+    public required string AzureLogicAppName { get; init; }
 
     public static TestConfiguration Load() => _instance.Value;
 }
