@@ -65,8 +65,13 @@ var logicAppSettings = {
 
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
+// Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
+// The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
+var azdEnvironmentId = getResourceName('azdEnvironment', environmentName, location, instanceId)
+
 var tags = {
   'azd-env-name': environmentName
+  'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-with-managed-identity'
 }
 
@@ -182,6 +187,9 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 //=============================================================================
 // Outputs
 //=============================================================================
+
+// Return the azd environment id
+output AZD_ENVIRONMENT_ID string = azdEnvironmentId
 
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
