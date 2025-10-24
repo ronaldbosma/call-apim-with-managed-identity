@@ -166,7 +166,9 @@ To set up the pipeline in your own repository, run the following command:
 azd pipeline config
 ```
 
-Follow the instructions and choose either **Federated User Managed Identity (MSI + OIDC)** or **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline.
+Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline and only a **service principal** can be granted the necessary permissions in Entra ID.
+
+After the service principal has been created, assign it the **Application Administrator** or **Cloud Application Administrator** role to allow it to create and delete the required app registrations.
 
 For detailed guidance, refer to:
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
