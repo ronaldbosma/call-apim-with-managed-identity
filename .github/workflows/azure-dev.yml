@@ -247,7 +247,7 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: integration-tests
+    needs: [ deploy, integration-tests ]
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
     
