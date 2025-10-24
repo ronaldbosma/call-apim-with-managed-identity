@@ -137,7 +137,7 @@ These PowerShell scripts are executed before the resources are removed.
   See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
   
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  Permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  Permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
 
 
