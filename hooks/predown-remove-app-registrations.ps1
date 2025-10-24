@@ -31,7 +31,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Find all app registrations with the matching azd-env-id tag
 $targetTag = "azd-env-id: $AzdEnvironmentId"
-Write-Host "Looking for app registrations with tag: '$targetTag'"
+Write-Host "Looking for app registrations with tag '$targetTag'"
 
 $apps = az ad app list | ConvertFrom-Json | Where-Object { $_.tags -contains $targetTag }
 
