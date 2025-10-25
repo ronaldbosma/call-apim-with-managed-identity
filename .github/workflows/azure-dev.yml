@@ -124,6 +124,7 @@ jobs:
       azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
       azure-function-app-name: ${{ steps.get-outputs.outputs.azure-function-app-name }}
       azure-logic-app-name: ${{ steps.get-outputs.outputs.azure-logic-app-name }}
+      apim-app-registration-identifier-uri: ${{ steps.get-outputs.outputs.apim-app-registration-identifier-uri }}
 
     steps:
     - name: Checkout code
@@ -184,12 +185,14 @@ jobs:
         $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
         $functionAppName = azd env get-value "AZURE_FUNCTION_APP_NAME"
         $logicAppName = azd env get-value "AZURE_LOGIC_APP_NAME"
+        $apimAppRegistrationIdentifierUri = azd env get-value "ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI"
         
         echo "azure-environment-id=$azureEnvironmentId" >> $env:GITHUB_OUTPUT
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
         echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
         echo "azure-function-app-name=$functionAppName" >> $env:GITHUB_OUTPUT
         echo "azure-logic-app-name=$logicAppName" >> $env:GITHUB_OUTPUT
+        echo "apim-app-registration-identifier-uri=$apimAppRegistrationIdentifierUri" >> $env:GITHUB_OUTPUT
 
 
   # ------------------------------------------------------------
@@ -232,6 +235,7 @@ jobs:
         AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
         AZURE_FUNCTION_APP_NAME: ${{ needs.deploy.outputs.azure-function-app-name }}
         AZURE_LOGIC_APP_NAME: ${{ needs.deploy.outputs.azure-logic-app-name }}
+        ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ needs.deploy.outputs.apim-app-registration-identifier-uri }}
 
     - name: Upload Test Results
       if: always()
