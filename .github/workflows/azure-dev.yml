@@ -68,11 +68,6 @@ jobs:
     # See https://github.com/Azure/azure-dev/issues/3920 for more details.
     - name: Create azd env
       run: azd env new $env:AZURE_ENV_NAME
-      
-    # Currently (2025-10-25), the default Bicep version installed is 0.37.4, but we need 0.38.3 because we're using the @onlyIfNotExists decorator.
-    - name: Update Bicep
-      run: |
-        az bicep upgrade
 
     - name: Print Tool Versions
       run: |
