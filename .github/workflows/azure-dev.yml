@@ -33,6 +33,7 @@ env:
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+  ALLOW_API_ACCESS_FOR_USERS: ${{ vars.ALLOW_API_ACCESS_FOR_USERS }}
 
 jobs:
 
