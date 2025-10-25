@@ -161,6 +161,23 @@ module logicApp 'modules/services/logic-app.bicep' = {
   ]
 }
 
+// Assign app roles to the deployer (the user or pipeline executing the deployment) so they can call the Protected API
+// These are configured for integration tests to demo the scenario where a user or pipeline calls on OAuth-Protected API using their own identity
+module assignAppRolesToDeployer 'modules/entra-id/assign-app-roles.bicep' = {
+  scope: subscription()
+  params: {
+    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    clientServicePrincipalId: deployer().objectId
+  }
+  
+  dependsOn: [
+    apimAppRegistration
+    // Assignment of the app roles fails if we do this immediately after creating the app registration.
+    // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
+    apiManagement
+  ]
+}
+
 //=============================================================================
 // Application Resources
 //=============================================================================
