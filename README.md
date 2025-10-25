@@ -190,15 +190,15 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the various scenarios through the deployed Azure services. The tests implement the same scenarios as described in the [Demo](./demos/demo.md) and are located in [IntegrationTests](tests/IntegrationTests).
+The project includes integration tests built with **.NET 9** that validate various scenarios through the deployed Azure services. The tests implement the same scenarios described in the [Demo](./demos/demo.md) and are located in [IntegrationTests](tests/IntegrationTests).
 
 Some things to note about the integration tests:
-- The tests automatically locate your azd environment's `.env` file if available to retrieve necessary configuration. In the [pipeline](#pipeline) it relies on environment variables set in the workflow.
+- The tests automatically locate your azd environment's `.env` file if available, to retrieve necessary configuration. In the [pipeline](#pipeline) they rely on environment variables set in the workflow.
 - The [Logic App integration tests](./tests/IntegrationTests/LogicAppTests.cs) use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) to retrieve the Logic App workflow callback URL, leveraging Azure CLI or Azure Developer CLI authentication.
-- The [Pipeline integration tests](./tests/IntegrationTests/PipelineCredentialsTests.cs) use the Azure CLI or Azure Developer CLI credentials to call the OAuth-protected API directly.
+- The [Pipeline integration tests](./tests/IntegrationTests/PipelineCredentialsTests.cs) use Azure CLI or Azure Developer CLI credentials to call the OAuth-protected API directly.
 
 > [!NOTE]
-> When running the integration tests, only the **Azure CLI** credentials seemed to work for me. The **Azure Developer CLI** credentials were only successful when configured to use Azure CLI credentials by setting `azd config set auth.useAzCliAuth "true"`.
+> When running the integration tests, only the **Azure CLI** credentials worked for me. The **Azure Developer CLI** credentials were only successful when configured to use Azure CLI credentials by executing `azd config set auth.useAzCliAuth "true"`.
 
 
 ## Troubleshooting
