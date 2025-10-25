@@ -102,7 +102,7 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
 }
 
-// Get Azure CLI service principal, created if not exists
+// Get Azure CLI service principal, create it if does not exists
 @onlyIfNotExists()
 resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if (allowApiAccessForUsers) {
   appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
