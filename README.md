@@ -180,7 +180,7 @@ Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, 
 
 After the service principal has been created:
 - Add the Microsoft Graph permissions **Application.ReadWrite.All**, **AppRoleAssignment.ReadWrite.All** and **DelegatedPermissionGrant.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
-- Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
+- Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role if it's not already assigned. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
 
 For detailed guidance, refer to:
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
