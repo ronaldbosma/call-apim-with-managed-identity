@@ -68,6 +68,13 @@ jobs:
     # See https://github.com/Azure/azure-dev/issues/3920 for more details.
     - name: Create azd env
       run: azd env new $env:AZURE_ENV_NAME
+      
+    - name: Print Tool Versions
+      run: |
+        az version
+        az bicep version
+        azd version
+        bicep --version
 
     - name: Bicep Lint
       run: |
