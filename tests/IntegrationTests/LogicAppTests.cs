@@ -1,8 +1,6 @@
 ﻿using IntegrationTests.Clients;
 using IntegrationTests.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace IntegrationTests
 {
