@@ -102,13 +102,13 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
 }
 
-// Get service principals for the pre-authorized applications
+// Get Azure CLI service principal, created if not exists
 @onlyIfNotExists()
 resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if (allowApiAccessForUsers) {
   appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
 }
 
-// Create OAuth2 permission grants for each pre-authorized application
+// Add OAuth2 permission grant to allow the Azure CLI service principal to access the API Management app registration impersonating the deployer principal
 resource oauth2PermissionGrantForAzureCli 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (allowApiAccessForUsers) {
   clientId: azureCliServicePrincipal!.id
   resourceId: apimServicePrincipal.id
