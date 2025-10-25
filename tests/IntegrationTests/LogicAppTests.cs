@@ -1,6 +1,8 @@
 ﻿using IntegrationTests.Clients;
 using IntegrationTests.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace IntegrationTests
 {
@@ -15,7 +17,12 @@ namespace IntegrationTests
             var config = TestConfiguration.Load();
 
             // Reuse the same Logic App workflow client so we don't have to fetch the callback URL multiple times
-            WorkflowClient = new LogicAppWorkflowClient(config, "call-protected-api-workflow");
+            WorkflowClient = new LogicAppWorkflowClient(
+                config.AzureSubscriptionId,
+                config.AzureResourceGroup,
+                config.AzureLogicAppName,
+                "call-protected-api-workflow"
+            );
         }
 
         [ClassCleanup]
