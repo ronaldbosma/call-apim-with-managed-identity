@@ -103,6 +103,7 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
 }
 
 // Get service principals for the pre-authorized applications
+@onlyIfNotExists()
 resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if (allowApiAccessForUsers) {
   appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
 }
