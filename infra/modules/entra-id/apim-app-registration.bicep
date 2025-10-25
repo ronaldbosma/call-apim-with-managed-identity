@@ -32,6 +32,9 @@ param name string
 @description('The identifier URI for the API Management app registration')
 param identifierUri string
 
+@description('If true, allows API access for users by adding a scope to the API Management app registration.')
+param allowApiAccessForUsers bool
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -51,6 +54,8 @@ var appRoles = [
   }
 ]
 
+var apiAccessScope = 'API.Access'
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -63,6 +68,20 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   api: {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
+
+    // Add OAuth2 permission scope so users can request an access token to access the API, if allowApiAccessForUsers is true
+    oauth2PermissionScopes: allowApiAccessForUsers ? [
+      {
+        id: guid(tenantId, name, apiAccessScope)
+        adminConsentDescription: 'Allows API access for users'
+        adminConsentDisplayName: apiAccessScope
+        isEnabled: true
+        type: 'User'
+        userConsentDescription: null
+        userConsentDisplayName: null
+        value: apiAccessScope
+      }
+    ] : []
   }
 
   appRoles: [for role in appRoles: {
@@ -81,6 +100,21 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
+}
+
+// Get Azure CLI service principal, create it if does not exists
+@onlyIfNotExists()
+resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if (allowApiAccessForUsers) {
+  appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
+}
+
+// Add OAuth2 permission grant to allow the Azure CLI service principal to access the API Management app registration impersonating a user
+// NOTE: The user still needs to be granted app roles in order to access the API
+resource oauth2PermissionGrantForAzureCli 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (allowApiAccessForUsers) {
+  clientId: azureCliServicePrincipal!.id
+  resourceId: apimServicePrincipal.id
+  consentType: 'AllPrincipals'
+  scope: apiAccessScope
 }
 
 //=============================================================================

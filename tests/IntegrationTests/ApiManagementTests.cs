@@ -3,30 +3,35 @@ using System.Net;
 
 namespace IntegrationTests;
 
+/// <summary>
+/// Tests scenarios where API Management uses its managed identity to call an OAuth-Protected API.
+/// </summary>
 [TestClass]
-public sealed class ApiManagementTests : IDisposable
+public sealed class ApiManagementTests
 {
-    private readonly HttpClient _httpClient;
+    private static HttpClient? HttpClient;
 
-    public ApiManagementTests()
+    [ClassInitialize]
+    public static void ClassInitialize(TestContext context)
     {
         var config = TestConfiguration.Load();
-        _httpClient = new HttpClient
+        HttpClient = new HttpClient
         {
             BaseAddress = new Uri($"https://{config.AzureApiManagementName}.azure-api.net")
         };
     }
 
-    public void Dispose()
+    [ClassCleanup]
+    public static void ClassCleanup()
     {
-        _httpClient.Dispose();
+        HttpClient?.Dispose();
     }
 
     [TestMethod]
     public async Task GetAsync_ApimHasSufficientPermissionsToCallProtected_200OkReturned()
     {
         // Act
-        var response = await _httpClient!.GetAsync("unprotected");
+        var response = await HttpClient!.GetAsync("unprotected");
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
@@ -36,7 +41,7 @@ public sealed class ApiManagementTests : IDisposable
     public async Task PostAsync_ApimHasSufficientPermissionsToCallProtected_200OkReturned()
     {
         // Act
-        var response = await _httpClient!.PostAsync("unprotected", null);
+        var response = await HttpClient!.PostAsync("unprotected", null);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
@@ -46,7 +51,7 @@ public sealed class ApiManagementTests : IDisposable
     public async Task PostAsync_ApimHasInsufficientPermissionsToCallProtected_401UnauthorizedReturned()
     {
         // Act
-        var response = await _httpClient!.DeleteAsync("unprotected");
+        var response = await HttpClient!.DeleteAsync("unprotected");
 
         // Assert
         Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "Unexpected status code returned");
