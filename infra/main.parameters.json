@@ -7,6 +7,9 @@
     },
     "location": {
       "value": "${AZURE_LOCATION}"
+    },
+    "allowApiAccessForUsers": {
+      "value": "${ALLOW_API_ACCESS_FOR_USERS=true}"
     }
   }
 }

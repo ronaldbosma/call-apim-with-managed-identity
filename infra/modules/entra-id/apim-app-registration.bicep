@@ -32,6 +32,9 @@ param name string
 @description('The identifier URI for the API Management app registration')
 param identifierUri string
 
+@description('If true, allows API access for users by adding a scope to the API Management app registration.')
+param allowApiAccessForUsers bool
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -51,6 +54,8 @@ var appRoles = [
   }
 ]
 
+var apiAccessScope = 'API.Access'
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -63,6 +68,20 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   api: {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
+
+    // Add OAuth2 permission scope so users can request an access token to access the API, if allowApiAccessForUsers is true
+    oauth2PermissionScopes: allowApiAccessForUsers ? [
+      {
+        id: guid(tenantId, name, apiAccessScope)
+        adminConsentDescription: 'Allows API access for users'
+        adminConsentDisplayName: apiAccessScope
+        isEnabled: true
+        type: 'User'
+        userConsentDescription: null
+        userConsentDisplayName: null
+        value: apiAccessScope
+      }
+    ] : []
   }
 
   appRoles: [for role in appRoles: {
@@ -81,6 +100,23 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
+}
+
+// Get service principals for the pre-authorized applications
+resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if (allowApiAccessForUsers) {
+  appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
+}
+
+// Create OAuth2 permission grants for each pre-authorized application
+resource oauth2PermissionGrantForAzureCli 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (allowApiAccessForUsers) {
+  clientId: azureCliServicePrincipal!.id
+  resourceId: apimServicePrincipal.id
+
+  // Only grant consent to the deployer principal
+  consentType: 'Principal'
+  principalId: deployer().objectId
+
+  scope: apiAccessScope
 }
 
 //=============================================================================
