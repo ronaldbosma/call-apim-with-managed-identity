@@ -8,7 +8,7 @@ namespace IntegrationTests;
 /// Tests scenarios where a Logic App workflow uses its managed identity to call an OAuth-Protected API.
 /// </summary>
 [TestClass]
-public class LogicAppTests
+public sealed class LogicAppTests
 {
     private static LogicAppWorkflowClient? WorkflowClient;
 

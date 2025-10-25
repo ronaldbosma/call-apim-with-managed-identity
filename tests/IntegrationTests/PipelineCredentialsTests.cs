@@ -10,7 +10,7 @@ namespace IntegrationTests;
 /// Tests scenarios where the pipeline credentials (Azure CLI or Azure Developer CLI) are used to call an OAuth-Protected API.
 /// </summary>
 [TestClass]
-public class PipelineCredentialsTests
+public sealed class PipelineCredentialsTests
 {
     private static HttpClient? HttpClient;
 
@@ -23,7 +23,7 @@ public class PipelineCredentialsTests
             BaseAddress = new Uri($"https://{config.AzureApiManagementName}.azure-api.net")
         };
 
-        // Create token credential what uses either the Azure CLI or Azure Developer CLI credentials
+        // Create token credential that uses either the Azure CLI or Azure Developer CLI credentials
         var tokenCredential = new ChainedTokenCredential(new AzureCliCredential(), new AzureDeveloperCliCredential());
 
         // Retrieve JWT access token and use it in the Authorization header
