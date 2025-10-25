@@ -174,7 +174,7 @@ azd pipeline config
 Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline, and only a **service principal** can be granted the necessary permissions in Entra ID.
 
 After the service principal has been created:
-- Add the Microsoft Graph permissions **Application.ReadWrite.All** and **AppRoleAssignment.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
+- Add the Microsoft Graph permissions **Application.ReadWrite.All**, **AppRoleAssignment.ReadWrite.All** and **DelegatedPermissionGrant.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
 - Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
 
 For detailed guidance, refer to:
@@ -190,12 +190,15 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the various scenarios through the deployed Azure services. The tests implement the same scenarios as described in the [Demo](./demos/demo.md).
+The project includes integration tests built with **.NET 9** that validate the various scenarios through the deployed Azure services. The tests implement the same scenarios as described in the [Demo](./demos/demo.md) and are located in [IntegrationTests](tests/IntegrationTests).
 
-The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
-The integration tests are located in [IntegrationTests](tests/IntegrationTests).
+Some things to note about the integration tests:
+- The tests automatically locate your azd environment's `.env` file if available to retrieve necessary configuration. In the [pipeline](#pipeline) it relies on environment variables set in the workflow.
+- The [Logic App integration tests](./tests/IntegrationTests/LogicAppTests.cs) use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) to retrieve the Logic App workflow callback URL, leveraging Azure CLI or Azure Developer CLI authentication.
+- The [Pipeline integration tests](./tests/IntegrationTests/PipelineCredentialsTests.cs) use the Azure CLI or Azure Developer CLI credentials to call the OAuth-protected API directly.
 
-The Logic App integration tests use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) and [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet) to securely retrieve the Logic App workflow callback URL, leveraging your Azure CLI or Azure Developer CLI authentication.
+> [!NOTE]
+> When running the integration tests, only the **Azure CLI** credentials seemed to work for me. The **Azure Developer CLI** credentials were only successful when configured to use Azure CLI credentials by setting `azd config set auth.useAzCliAuth "true"`.
 
 
 ## Troubleshooting
