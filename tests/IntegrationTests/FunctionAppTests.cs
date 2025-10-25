@@ -7,29 +7,31 @@ namespace IntegrationTests;
 /// Tests scenarios where an Azure Function uses its managed identity to call an OAuth-Protected API.
 /// </summary>
 [TestClass]
-public sealed class FunctionAppTests : IDisposable
+public sealed class FunctionAppTests
 {
-    private readonly HttpClient _httpClient;
+    private static HttpClient? HttpClient;
 
-    public FunctionAppTests()
+    [ClassInitialize]
+    public static void ClassInitialize(TestContext context)
     {
         var config = TestConfiguration.Load();
-        _httpClient = new HttpClient
+        HttpClient = new HttpClient
         {
             BaseAddress = new Uri($"https://{config.AzureFunctionAppName}.azurewebsites.net")
         };
     }
 
-    public void Dispose()
+    [ClassCleanup]
+    public static void ClassCleanup()
     {
-        _httpClient.Dispose();
+        HttpClient?.Dispose();
     }
 
     [TestMethod]
     public async Task GetAsync_FunctionAppHasSufficientPermissionsToCallProtected_200OkReturned()
     {
         // Act
-        var response = await _httpClient!.GetAsync("api/CallProtectedApiFunction");
+        var response = await HttpClient!.GetAsync("api/CallProtectedApiFunction");
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
@@ -39,7 +41,7 @@ public sealed class FunctionAppTests : IDisposable
     public async Task PostAsync_FunctionAppHasSufficientPermissionsToCallProtected_200OkReturned()
     {
         // Act
-        var response = await _httpClient!.PostAsync("api/CallProtectedApiFunction", null);
+        var response = await HttpClient!.PostAsync("api/CallProtectedApiFunction", null);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
@@ -49,7 +51,7 @@ public sealed class FunctionAppTests : IDisposable
     public async Task PostAsync_FunctionAppHasInsufficientPermissionsToCallProtected_401UnauthorizedReturned()
     {
         // Act
-        var response = await _httpClient!.DeleteAsync("api/CallProtectedApiFunction");
+        var response = await HttpClient!.DeleteAsync("api/CallProtectedApiFunction");
 
         // Assert
         Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "Unexpected status code returned");
