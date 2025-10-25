@@ -16,6 +16,7 @@ on:
       - 'hooks/**'
       - 'infra/**'
       - 'src/**'
+      - 'tests/IntegrationTests/**'
       - 'azure.yaml'
       - 'bicepconfig.json'
 
@@ -83,6 +84,10 @@ jobs:
       run: |
         azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
+    - name: Build Integration Tests
+      run: |
+        dotnet build ./tests/IntegrationTests/IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+
     - name: Upload Function App Package
       uses: actions/upload-artifact@v4
       with:
@@ -97,6 +102,13 @@ jobs:
         path: ./artifacts/logicapp-package.zip
         retention-days: 1
 
+    - name: Upload Integration Tests Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests/
+        retention-days: 1
+
 
   # ------------------------------------------------------------
   # Deploy to Azure
@@ -109,7 +121,10 @@ jobs:
     outputs:
       azure-environment-id: ${{ steps.get-outputs.outputs.azure-environment-id }}
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
-    
+      azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
+      azure-function-app-name: ${{ steps.get-outputs.outputs.azure-function-app-name }}
+      azure-logic-app-name: ${{ steps.get-outputs.outputs.azure-logic-app-name }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -166,9 +181,65 @@ jobs:
       run: |
         $azureEnvironmentId = azd env get-value "AZURE_ENV_ID"
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
+        $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
+        $functionAppName = azd env get-value "AZURE_FUNCTION_APP_NAME"
+        $logicAppName = azd env get-value "AZURE_LOGIC_APP_NAME"
         
         echo "azure-environment-id=$azureEnvironmentId" >> $env:GITHUB_OUTPUT
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
+        echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
+        echo "azure-function-app-name=$functionAppName" >> $env:GITHUB_OUTPUT
+        echo "azure-logic-app-name=$logicAppName" >> $env:GITHUB_OUTPUT
+
+
+  # ------------------------------------------------------------
+  # Execute Integration Tests
+  # ------------------------------------------------------------
+
+  integration-tests:
+    name: Execute Integration Tests
+    needs: deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Download Integration Tests Package
+      uses: actions/download-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests
+
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+    # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Run Integration Tests
+      run: |
+        dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+      working-directory: ./
+      env:
+        # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
+        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
+        AZURE_FUNCTION_APP_NAME: ${{ needs.deploy.outputs.azure-function-app-name }}
+        AZURE_LOGIC_APP_NAME: ${{ needs.deploy.outputs.azure-logic-app-name }}
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: ./artifacts/integration-tests/TestResults/
+        retention-days: 1
 
 
   # ------------------------------------------------------------
@@ -177,7 +248,7 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: deploy
+    needs: [ deploy, integration-tests ]
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
     

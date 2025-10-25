@@ -102,6 +102,8 @@ azd down --purge
 The repository consists of the following files and directories:
 
 ```
+├── .github                    
+│   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README and demo guide ]
@@ -118,7 +120,9 @@ The repository consists of the following files and directories:
 ├── src                        
 │   ├── functionApp            [ Azure Function that calls the protected API ]
 │   └── logicApp               [ Logic App workflow that calls the protected API ]
-├── tests                      [ Contains HTTP request files for testing different scenarios ]
+├── tests                      
+│   ├── IntegrationTests       [ Integration tests for automatically verifying different scenarios ]
+│   └── *.http                 [ HTTP request files for testing different scenarios ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
 ```
@@ -150,8 +154,9 @@ This template includes a GitHub Actions workflow that automates the build, deplo
 
 The pipeline consists of the following jobs:
 
-- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App.
+- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App, Logic App and integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
 
   By default, cleanup runs automatically after the deployment. This can be disabled via an input parameter when the workflow is triggered manually.
@@ -181,6 +186,16 @@ For detailed guidance, refer to:
 
 > [!NOTE]
 > The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
+
+
+## Integration Tests
+
+The project includes integration tests built with **.NET 9** that validate the various scenarios through the deployed Azure services. The tests implement the same scenarios as described in the [Demo](./demos/demo.md).
+
+The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
+The integration tests are located in [IntegrationTests](tests/IntegrationTests).
+
+The Logic App integration tests use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) and [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet) to securely retrieve the Logic App workflow callback URL, leveraging your Azure CLI or Azure Developer CLI authentication.
 
 
 ## Troubleshooting
