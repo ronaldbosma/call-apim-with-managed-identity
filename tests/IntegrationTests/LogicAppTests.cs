@@ -2,6 +2,9 @@
 using IntegrationTests.Configuration;
 using System.Net;
 
+/// <summary>
+/// Tests scenarios where a Logic App workflow uses its managed identity to call an OAuth-Protected API.
+/// </summary>
 namespace IntegrationTests
 {
     [TestClass]

@@ -3,6 +3,9 @@ using System.Net;
 
 namespace IntegrationTests;
 
+/// <summary>
+/// Tests scenarios where API Management uses its managed identity to call an OAuth-Protected API.
+/// </summary>
 [TestClass]
 public sealed class ApiManagementTests : IDisposable
 {
