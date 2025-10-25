@@ -195,6 +195,8 @@ The project includes integration tests built with **.NET 9** that validate the v
 The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
 The integration tests are located in [IntegrationTests](tests/IntegrationTests).
 
+The Logic App integration tests use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) and [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet) to securely retrieve the Logic App workflow callback URL, leveraging your Azure CLI or Azure Developer CLI authentication.
+
 
 ## Troubleshooting
 
