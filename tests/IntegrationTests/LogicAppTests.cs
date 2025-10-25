@@ -2,73 +2,72 @@
 using IntegrationTests.Configuration;
 using System.Net;
 
+namespace IntegrationTests;
+
 /// <summary>
 /// Tests scenarios where a Logic App workflow uses its managed identity to call an OAuth-Protected API.
 /// </summary>
-namespace IntegrationTests
+[TestClass]
+public class LogicAppTests
 {
-    [TestClass]
-    public class LogicAppTests
+    private static LogicAppWorkflowClient? WorkflowClient;
+
+    [ClassInitialize]
+    public static void ClassInitialize(TestContext context)
     {
-        private static LogicAppWorkflowClient? WorkflowClient;
+        var config = TestConfiguration.Load();
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            var config = TestConfiguration.Load();
+        // Reuse the same Logic App workflow client so we don't have to fetch the callback URL multiple times
+        WorkflowClient = new LogicAppWorkflowClient(
+            config.AzureSubscriptionId,
+            config.AzureResourceGroup,
+            config.AzureLogicAppName,
+            "call-protected-api-workflow"
+        );
+    }
 
-            // Reuse the same Logic App workflow client so we don't have to fetch the callback URL multiple times
-            WorkflowClient = new LogicAppWorkflowClient(
-                config.AzureSubscriptionId,
-                config.AzureResourceGroup,
-                config.AzureLogicAppName,
-                "call-protected-api-workflow"
-            );
-        }
+    [ClassCleanup]
+    public static void ClassCleanup()
+    {
+        WorkflowClient?.Dispose();
+    }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            WorkflowClient?.Dispose();
-        }
+    [TestMethod]
+    public async Task PostAsyncWithGetHttpMethod_LogicAppHasSufficientPermissionsToCallProtected_200OkReturned()
+    {
+        // Arrange
+        var requestData = new { httpMethod = "GET" };
 
-        [TestMethod]
-        public async Task PostAsyncWithGetHttpMethod_LogicAppHasSufficientPermissionsToCallProtected_200OkReturned()
-        {
-            // Arrange
-            var requestData = new { httpMethod = "GET" };
+        // Act
+        var response = await WorkflowClient!.PostAsync(requestData);
 
-            // Act
-            var response = await WorkflowClient!.PostAsync(requestData);
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
+    }
 
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
-        }
+    [TestMethod]
+    public async Task PostAsyncWithPostHttpMethod_LogicAppHasSufficientPermissionsToCallProtected_200OkReturned()
+    {
+        // Arrange
+        var requestData = new { httpMethod = "POST" };
 
-        [TestMethod]
-        public async Task PostAsyncWithPostHttpMethod_LogicAppHasSufficientPermissionsToCallProtected_200OkReturned()
-        {
-            // Arrange
-            var requestData = new { httpMethod = "POST" };
+        // Act
+        var response = await WorkflowClient!.PostAsync(requestData);
 
-            // Act
-            var response = await WorkflowClient!.PostAsync(requestData);
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
+    }
 
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Unexpected status code returned");
-        }
+    [TestMethod]
+    public async Task PostAsyncWithDeleteHttpMethod_LogicAppHasInsufficientPermissionsToCallProtected_401UnauthorizedReturned()
+    {
+        // Arrange
+        var requestData = new { httpMethod = "DELETE" };
 
-        [TestMethod]
-        public async Task PostAsyncWithDeleteHttpMethod_LogicAppHasInsufficientPermissionsToCallProtected_401UnauthorizedReturned()
-        {
-            // Arrange
-            var requestData = new { httpMethod = "DELETE" };
+        // Act
+        var response = await WorkflowClient!.PostAsync(requestData);
 
-            // Act
-            var response = await WorkflowClient!.PostAsync(requestData);
-
-            // Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "Unexpected status code returned");
-        }
+        // Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "Unexpected status code returned");
     }
 }
