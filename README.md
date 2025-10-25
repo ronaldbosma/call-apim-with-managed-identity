@@ -18,7 +18,12 @@ This template deploys the following resources:
 
 - **Supporting resources**: Application Insights, Log Analytics workspace, Storage Account, and Entra ID app registrations
 
-The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. This approach provides better security and eliminates the need to manage and rotate secrets.
+The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. 
+This approach provides better security and eliminates the need to manage and rotate secrets. 
+Supported scenarios include:
+- [Call OAuth-Protected APIs with Managed Identity from API Management](https://ronaldbosma.github.io/blog/2025/09/29/call-oauth-protected-apis-with-managed-identity-from-api-management/)
+- [Call OAuth-Protected APIs with Managed Identity from Azure Functions (.NET)](https://ronaldbosma.github.io/blog/2025/09/20/call-oauth-protected-apis-with-managed-identity-from-.net/)
+- [Call OAuth-Protected APIs with Managed Identity from Logic Apps](https://ronaldbosma.github.io/blog/2025/09/24/call-oauth-protected-apis-with-managed-identity-from-logic-apps/)
 
 > [!NOTE]
 > If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
