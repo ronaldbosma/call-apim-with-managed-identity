@@ -228,6 +228,7 @@ jobs:
       working-directory: ./
       env:
         # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
         AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
         AZURE_FUNCTION_APP_NAME: ${{ needs.deploy.outputs.azure-function-app-name }}
         AZURE_LOGIC_APP_NAME: ${{ needs.deploy.outputs.azure-logic-app-name }}
