@@ -59,7 +59,9 @@ namespace IntegrationTests.Clients
         /// <returns>A configured HttpClient instance.</returns>
         private async Task<HttpClient> CreateHttpClientAsync()
         {
-            var armClient = new ArmClient(new DefaultAzureCredential());
+            // Use either the Azure CLI or Azure Developer CLI credentials when using the ARM API
+            var tokenCredential = new ChainedTokenCredential(new AzureCliCredential(), new AzureDeveloperCliCredential());
+            var armClient = new ArmClient(tokenCredential);
 
             // Create the resource identifier for Logic App Standard workflow trigger
             var workflowTriggerId = WorkflowTriggerResource.CreateResourceIdentifier(
