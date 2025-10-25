@@ -108,15 +108,12 @@ resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if 
   appId: '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
 }
 
-// Add OAuth2 permission grant to allow the Azure CLI service principal to access the API Management app registration impersonating the deployer principal
+// Add OAuth2 permission grant to allow the Azure CLI service principal to access the API Management app registration impersonating a user
+// NOTE: The user still needs to be granted app roles in order to access the API
 resource oauth2PermissionGrantForAzureCli 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (allowApiAccessForUsers) {
   clientId: azureCliServicePrincipal!.id
   resourceId: apimServicePrincipal.id
-
-  // Only grant consent to the deployer principal
-  consentType: 'Principal'
-  principalId: deployer().objectId
-
+  consentType: 'AllPrincipals'
   scope: apiAccessScope
 }
 
