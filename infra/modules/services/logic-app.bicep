@@ -140,3 +140,9 @@ module assignAppRolesToLogicAppSystemAssignedIdentity '../entra-id/assign-app-ro
     clientServicePrincipalId: logicApp.identity.principalId
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output endpoint string = 'https://${logicApp.properties.defaultHostName}'

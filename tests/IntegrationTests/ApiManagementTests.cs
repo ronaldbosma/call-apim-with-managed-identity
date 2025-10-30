@@ -17,7 +17,7 @@ public sealed class ApiManagementTests
         var config = TestConfiguration.Load();
         HttpClient = new HttpClient
         {
-            BaseAddress = new Uri($"https://{config.AzureApiManagementName}.azure-api.net")
+            BaseAddress = config.AzureApiManagementGatewayUrl
         };
     }
 

@@ -20,7 +20,7 @@ public sealed class PipelineCredentialsTests
         var config = TestConfiguration.Load();
         HttpClient = new HttpClient
         {
-            BaseAddress = new Uri($"https://{config.AzureApiManagementName}.azure-api.net")
+            BaseAddress = config.AzureApiManagementGatewayUrl
         };
 
         // Create token credential that uses either the Azure CLI or Azure Developer CLI credentials

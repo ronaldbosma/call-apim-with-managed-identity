@@ -17,7 +17,7 @@ public sealed class FunctionAppTests
         var config = TestConfiguration.Load();
         HttpClient = new HttpClient
         {
-            BaseAddress = new Uri($"https://{config.AzureFunctionAppName}.azurewebsites.net")
+            BaseAddress = config.AzureFunctionAppEndpoint
         };
     }
 

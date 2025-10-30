@@ -135,3 +135,9 @@ module assignAppRolesToFunctionAppSystemAssignedIdentity '../entra-id/assign-app
     clientServicePrincipalId: functionApp.identity.principalId
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output endpoint string = 'https://${functionApp.properties.defaultHostName}'
