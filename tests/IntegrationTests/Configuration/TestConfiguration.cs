@@ -17,10 +17,10 @@ internal class TestConfiguration
 
         return new TestConfiguration
         {
-            AzureSubscriptionId = configuration.GetRequiredString("AZURE_SUBSCRIPTION_ID"),
-            AzureResourceGroup = configuration.GetRequiredString("AZURE_RESOURCE_GROUP"),
             AzureApiManagementGatewayUrl = configuration.GetRequiredUri("AZURE_API_MANAGEMENT_GATEWAY_URL"),
             AzureFunctionAppEndpoint = configuration.GetRequiredUri("AZURE_FUNCTION_APP_ENDPOINT"),
+            AzureSubscriptionId = configuration.GetRequiredString("AZURE_SUBSCRIPTION_ID"),
+            AzureResourceGroup = configuration.GetRequiredString("AZURE_RESOURCE_GROUP"),
             AzureLogicAppName = configuration.GetRequiredString("AZURE_LOGIC_APP_NAME"),
             OAuthTargetResource = configuration.GetRequiredString("ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI")
         };
