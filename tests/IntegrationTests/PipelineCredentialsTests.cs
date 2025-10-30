@@ -25,9 +25,9 @@ public sealed class PipelineCredentialsTests
 
         // Create token credential that uses either the Azure CLI or Azure Developer CLI credentials
         var tokenCredential = new ChainedTokenCredential(new AzureCliCredential(), new AzureDeveloperCliCredential());
-
+        
         // Retrieve JWT access token and use it in the Authorization header
-        var tokenResult = await tokenCredential.GetTokenAsync(new TokenRequestContext([config.OAuthTargetResource]));
+        var tokenResult = await tokenCredential.GetTokenAsync(new TokenRequestContext([$"{config.OAuthTargetResource}/.default"]));
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.Token);
     }
 
