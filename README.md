@@ -202,9 +202,6 @@ Some things to note about the integration tests:
 - The [Logic App integration tests](./tests/IntegrationTests/LogicAppTests.cs) use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) to retrieve the Logic App workflow callback URL, leveraging Azure CLI or Azure Developer CLI authentication.
 - The [Pipeline integration tests](./tests/IntegrationTests/PipelineCredentialsTests.cs) use Azure CLI or Azure Developer CLI credentials to call the OAuth-protected API directly.
 
-> [!NOTE]
-> When running the integration tests, only the **Azure CLI** credentials worked for me. The **Azure Developer CLI** credentials were only successful when configured to use Azure CLI credentials by executing `azd config set auth.useAzCliAuth "true"`.
-
 
 ## Troubleshooting
 
