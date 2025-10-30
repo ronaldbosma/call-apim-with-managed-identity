@@ -20,10 +20,6 @@ on:
       - 'azure.yaml'
       - 'bicepconfig.json'
 
-permissions:
-  id-token: write # Required to fetch an OIDC token for Azure authentication
-  contents: read  # Required to checkout code if needed
-
 defaults:
   run:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
@@ -45,6 +41,8 @@ jobs:
   build-verify-package:
     name: Build, Verify and Package
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Required to checkout code if needed
     
     steps:
     - name: Checkout code
@@ -126,6 +124,10 @@ jobs:
     name: Deploy to Azure
     needs: build-verify-package
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
+      contents: read  # Required to checkout code if needed
+
     outputs:
       AZURE_ENV_ID: ${{ steps.get-outputs.outputs.AZURE_ENV_ID }}
       AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
@@ -207,6 +209,8 @@ jobs:
     name: Execute Integration Tests
     needs: deploy
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
     
     steps:
     - name: Setup .NET 9
@@ -259,6 +263,9 @@ jobs:
     needs: [ deploy, integration-tests ]
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
+      contents: read  # Required to checkout code if needed
     
     steps:
     - name: Checkout code
