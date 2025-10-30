@@ -127,12 +127,12 @@ jobs:
     needs: build-verify-package
     runs-on: ubuntu-latest
     outputs:
-      azure-environment-id: ${{ steps.get-outputs.outputs.azure-environment-id }}
-      azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
-      azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
-      azure-function-app-name: ${{ steps.get-outputs.outputs.azure-function-app-name }}
-      azure-logic-app-name: ${{ steps.get-outputs.outputs.azure-logic-app-name }}
-      apim-app-registration-identifier-uri: ${{ steps.get-outputs.outputs.apim-app-registration-identifier-uri }}
+      AZURE_ENV_ID: ${{ steps.get-outputs.outputs.AZURE_ENV_ID }}
+      AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
+      AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+      AZURE_FUNCTION_APP_ENDPOINT: ${{ steps.get-outputs.outputs.AZURE_FUNCTION_APP_ENDPOINT }}
+      AZURE_LOGIC_APP_NAME: ${{ steps.get-outputs.outputs.AZURE_LOGIC_APP_NAME }}
+      ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ steps.get-outputs.outputs.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI }}
 
     steps:
     - name: Checkout code
@@ -188,19 +188,15 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        $azureEnvironmentId = azd env get-value "AZURE_ENV_ID"
-        $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
-        $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
-        $functionAppName = azd env get-value "AZURE_FUNCTION_APP_NAME"
-        $logicAppName = azd env get-value "AZURE_LOGIC_APP_NAME"
-        $apimAppRegistrationIdentifierUri = azd env get-value "ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI"
-        
-        echo "azure-environment-id=$azureEnvironmentId" >> $env:GITHUB_OUTPUT
-        echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
-        echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
-        echo "azure-function-app-name=$functionAppName" >> $env:GITHUB_OUTPUT
-        echo "azure-logic-app-name=$logicAppName" >> $env:GITHUB_OUTPUT
-        echo "apim-app-registration-identifier-uri=$apimAppRegistrationIdentifierUri" >> $env:GITHUB_OUTPUT
+        $variableNames = @(
+          "AZURE_ENV_ID",
+          "AZURE_RESOURCE_GROUP",
+          "AZURE_API_MANAGEMENT_GATEWAY_URL",
+          "AZURE_FUNCTION_APP_ENDPOINT",
+          "AZURE_LOGIC_APP_NAME",
+          "ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI"
+        )
+        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames $variableNames
 
 
   # ------------------------------------------------------------
@@ -238,12 +234,12 @@ jobs:
         dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
       env:
-        # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
-        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
-        AZURE_FUNCTION_APP_NAME: ${{ needs.deploy.outputs.azure-function-app-name }}
-        AZURE_LOGIC_APP_NAME: ${{ needs.deploy.outputs.azure-logic-app-name }}
-        ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ needs.deploy.outputs.apim-app-registration-identifier-uri }}
+        # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}
+        AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+        AZURE_FUNCTION_APP_ENDPOINT: ${{ needs.deploy.outputs.AZURE_FUNCTION_APP_ENDPOINT }}
+        AZURE_LOGIC_APP_NAME: ${{ needs.deploy.outputs.AZURE_LOGIC_APP_NAME }}
+        ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ needs.deploy.outputs.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI }}
 
     - name: Upload Test Results
       if: always()
@@ -297,5 +293,5 @@ jobs:
       env:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-        AZURE_ENV_ID: ${{ needs.deploy.outputs.azure-environment-id }}
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
+        AZURE_ENV_ID: ${{ needs.deploy.outputs.AZURE_ENV_ID }}
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}
