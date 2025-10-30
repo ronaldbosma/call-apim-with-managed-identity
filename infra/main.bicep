@@ -231,8 +231,8 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 
 // Return resource endpoints
 output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
-output AZURE_FUNCTION_APP_ENDPOINT string = 'https://${functionApp!.outputs.defaultHostName}'
-output AZURE_LOGIC_APP_ENDPOINT string = 'https://${logicApp!.outputs.defaultHostName}'
+output AZURE_FUNCTION_APP_ENDPOINT string = 'https://${functionApp.outputs.defaultHostName}'
+output AZURE_LOGIC_APP_ENDPOINT string = 'https://${logicApp.outputs.defaultHostName}'
 
 // Return whether API access for users is allowed
 output ALLOW_API_ACCESS_FOR_USERS bool = allowApiAccessForUsers
