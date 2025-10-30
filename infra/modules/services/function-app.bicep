@@ -140,4 +140,4 @@ module assignAppRolesToFunctionAppSystemAssignedIdentity '../entra-id/assign-app
 // Outputs
 //=============================================================================
 
-output defaultHostName string = functionApp.properties.defaultHostName
+output endpoint string = 'https://${functionApp.properties.defaultHostName}'

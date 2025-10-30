@@ -145,4 +145,4 @@ module assignAppRolesToLogicAppSystemAssignedIdentity '../entra-id/assign-app-ro
 // Outputs
 //=============================================================================
 
-output defaultHostName string = logicApp.properties.defaultHostName
+output endpoint string = 'https://${logicApp.properties.defaultHostName}'
