@@ -25,8 +25,7 @@ Supported scenarios include:
 - [Call OAuth-Protected APIs with Managed Identity from Azure Functions (.NET)](https://ronaldbosma.github.io/blog/2025/09/20/call-oauth-protected-apis-with-managed-identity-from-.net/)
 - [Call OAuth-Protected APIs with Managed Identity from Logic Apps](https://ronaldbosma.github.io/blog/2025/09/24/call-oauth-protected-apis-with-managed-identity-from-logic-apps/)
 
-> [!NOTE]
-> If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
+If you can't use a managed identity, have a look at [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth) instead.
 
 > [!IMPORTANT]  
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
