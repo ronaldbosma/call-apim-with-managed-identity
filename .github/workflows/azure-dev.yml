@@ -239,6 +239,7 @@ jobs:
       working-directory: ./
       env:
         # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}
         AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
         AZURE_FUNCTION_APP_ENDPOINT: ${{ needs.deploy.outputs.AZURE_FUNCTION_APP_ENDPOINT }}
