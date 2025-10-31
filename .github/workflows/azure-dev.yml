@@ -225,7 +225,7 @@ jobs:
         path: ./artifacts/integration-tests
 
     # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
+    # This is necessary for the integration test to access Azure resources if needed.
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
