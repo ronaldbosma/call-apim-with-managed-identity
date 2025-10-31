@@ -11,6 +11,7 @@ namespace IntegrationTests.Clients
     /// </summary>
     internal class LogicAppWorkflowClient : IDisposable
     {
+        private readonly string _tenantId;
         private readonly string _subscriptionId;
         private readonly string _resourceGroupName;
         private readonly string _logicAppName;
@@ -23,26 +24,29 @@ namespace IntegrationTests.Clients
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicAppWorkflowClient"/> class with the default trigger name.
         /// </summary>
+        /// <param name="tenantId">The Azure tenant ID containing the Azure subscription with Logic App</param>
         /// <param name="subscriptionId">The Azure subscription ID containing the Logic App.</param>
         /// <param name="resourceGroupName">The name of the resource group containing the Logic App.</param>
         /// <param name="logicAppName">The name of the Logic App.</param>
         /// <param name="workflowName">The name of the workflow within the Logic App.</param>
-        public LogicAppWorkflowClient(string subscriptionId, string resourceGroupName, string logicAppName, string workflowName)
-            : this(subscriptionId, resourceGroupName, logicAppName, workflowName, "When_a_HTTP_request_is_received")
+        public LogicAppWorkflowClient(string tenantId, string subscriptionId, string resourceGroupName, string logicAppName, string workflowName)
+            : this(tenantId, subscriptionId, resourceGroupName, logicAppName, workflowName, "When_a_HTTP_request_is_received")
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicAppWorkflowClient"/> class with a custom trigger name.
         /// </summary>
+        /// <param name="tenantId">The Azure tenant ID containing the Azure subscription with Logic App</param>
         /// <param name="subscriptionId">The Azure subscription ID containing the Logic App.</param>
         /// <param name="resourceGroupName">The name of the resource group containing the Logic App.</param>
         /// <param name="logicAppName">The name of the Logic App.</param>
         /// <param name="workflowName">The name of the workflow within the Logic App.</param>
         /// <param name="triggerName">The name of the trigger within the workflow.</param>
         /// <exception cref="ArgumentNullException">Thrown when any parameter is null.</exception>
-        public LogicAppWorkflowClient(string subscriptionId, string resourceGroupName, string logicAppName, string workflowName, string triggerName)
+        public LogicAppWorkflowClient(string tenantId, string subscriptionId, string resourceGroupName, string logicAppName, string workflowName, string triggerName)
         {
+            _tenantId = tenantId;
             _subscriptionId = subscriptionId ?? throw new ArgumentNullException(nameof(subscriptionId));
             _resourceGroupName = resourceGroupName ?? throw new ArgumentNullException(nameof(resourceGroupName));
             _logicAppName = logicAppName ?? throw new ArgumentNullException(nameof(logicAppName));
@@ -60,7 +64,11 @@ namespace IntegrationTests.Clients
         private async Task<HttpClient> CreateHttpClientAsync()
         {
             // Use either the Azure CLI or Azure Developer CLI credentials when using the ARM API
-            var tokenCredential = new ChainedTokenCredential(new AzureCliCredential(), new AzureDeveloperCliCredential());
+            var tokenCredential = new ChainedTokenCredential(
+                new AzureCliCredential(),
+                // Tenant ID needs to be configured explicitly for azd icm with this client, otherwise it'll use the Microsoft Service's Microsoft Entra tenant ID
+                new AzureDeveloperCliCredential(new AzureDeveloperCliCredentialOptions { TenantId = _tenantId })
+            );
             var armClient = new ArmClient(tokenCredential);
 
             // Create the resource identifier for Logic App Standard workflow trigger
