@@ -1,5 +1,5 @@
-﻿using IntegrationTests.Configuration;
-using IntegrationTests.Handlers;
+﻿using IntegrationTests.Clients;
+using IntegrationTests.Configuration;
 using System.Net;
 
 namespace IntegrationTests;
@@ -16,10 +16,7 @@ public sealed class ApiManagementTests
     public static void ClassInitialize(TestContext context)
     {
         var config = TestConfiguration.Load();
-        HttpClient = new HttpClient(new HttpMessageLoggingHandler(new HttpClientHandler()))
-        {
-            BaseAddress = config.AzureApiManagementGatewayUrl
-        };
+        HttpClient = new IntegrationTestHttpClient(config.AzureApiManagementGatewayUrl);
     }
 
     [ClassCleanup]

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace IntegrationTests.Handlers
+namespace IntegrationTests.Clients.Handlers
 {
     /// <summary>
     /// Handler to log HTTP request and response message details like the Content, HTTP method, URL, Status Code
