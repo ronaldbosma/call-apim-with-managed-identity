@@ -19,6 +19,7 @@ public sealed class LogicAppTests
 
         // Reuse the same Logic App workflow client so we don't have to fetch the callback URL multiple times
         WorkflowClient = new LogicAppWorkflowClient(
+            config.AzureTenantId,
             config.AzureSubscriptionId,
             config.AzureResourceGroup,
             config.AzureLogicAppName,

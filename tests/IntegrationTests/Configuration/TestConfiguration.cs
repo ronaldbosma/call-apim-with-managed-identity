@@ -19,6 +19,7 @@ internal class TestConfiguration
         {
             AzureApiManagementGatewayUrl = configuration.GetRequiredUri("AZURE_API_MANAGEMENT_GATEWAY_URL"),
             AzureFunctionAppEndpoint = configuration.GetRequiredUri("AZURE_FUNCTION_APP_ENDPOINT"),
+            AzureTenantId = configuration.GetRequiredString("AZURE_TENANT_ID"),
             AzureSubscriptionId = configuration.GetRequiredString("AZURE_SUBSCRIPTION_ID"),
             AzureResourceGroup = configuration.GetRequiredString("AZURE_RESOURCE_GROUP"),
             AzureLogicAppName = configuration.GetRequiredString("AZURE_LOGIC_APP_NAME"),
@@ -29,6 +30,7 @@ internal class TestConfiguration
     public required Uri AzureApiManagementGatewayUrl { get; init; }
     public required Uri AzureFunctionAppEndpoint { get; init; }
 
+    public required string AzureTenantId { get; init; }
     public required string AzureSubscriptionId { get; init; }
     public required string AzureResourceGroup { get; init; }
     public required string AzureLogicAppName { get; init; }

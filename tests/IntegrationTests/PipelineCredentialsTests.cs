@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using IntegrationTests.Clients;
 using IntegrationTests.Configuration;
 using System.Net;
 using System.Net.Http.Headers;
@@ -18,10 +19,7 @@ public sealed class PipelineCredentialsTests
     public static async Task ClassInitialize(TestContext context)
     {
         var config = TestConfiguration.Load();
-        HttpClient = new HttpClient
-        {
-            BaseAddress = config.AzureApiManagementGatewayUrl
-        };
+        HttpClient = new IntegrationTestHttpClient(config.AzureApiManagementGatewayUrl);
 
         // Create token credential that uses either the Azure CLI or Azure Developer CLI credentials
         var tokenCredential = new ChainedTokenCredential(new AzureCliCredential(), new AzureDeveloperCliCredential());

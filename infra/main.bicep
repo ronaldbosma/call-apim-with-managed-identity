@@ -213,6 +213,9 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 // Outputs
 //=============================================================================
 
+// Return the Azure tenant id so it is available in the .env file and can be used in e.g. the integration tests
+output AZURE_TENANT_ID string = subscription().tenantId
+
 // Return the azd environment id
 output AZURE_ENV_ID string = azdEnvironmentId
 
