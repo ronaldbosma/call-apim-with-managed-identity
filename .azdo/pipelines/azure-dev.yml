@@ -17,9 +17,6 @@ pr:
       - '.azdo/pipelines/azure-dev.yml'
 
 variables:
-  # Add a unique suffix to the environment name for pull requests to avoid name conflicts
-  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    AZURE_ENV_NAME: '$(AZURE_ENV_NAME)-pr$(System.PullRequest.PullRequestNumber)'
   # Disable user access to the deployed API by default; Only the pipeline needs access in most scenarios.
   ALLOW_API_ACCESS_FOR_USERS: false
 
