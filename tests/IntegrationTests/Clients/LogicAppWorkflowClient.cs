@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.AppService;
+using IntegrationTests.Handlers;
 using System.Text;
 using System.Text.Json;
 
@@ -84,7 +85,7 @@ namespace IntegrationTests.Clients
             var workflowTrigger = armClient.GetWorkflowTriggerResource(workflowTriggerId);
             var callbackUrl = await workflowTrigger.GetCallbackUrlAsync();
 
-            return new HttpClient
+            return new HttpClient(new HttpMessageLoggingHandler(new HttpClientHandler()))
             {
                 BaseAddress = new Uri(callbackUrl.Value.Value)
             };

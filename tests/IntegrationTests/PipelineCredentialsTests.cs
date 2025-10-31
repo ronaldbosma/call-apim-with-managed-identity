@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Azure.Identity;
 using IntegrationTests.Configuration;
+using IntegrationTests.Handlers;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -18,7 +19,7 @@ public sealed class PipelineCredentialsTests
     public static async Task ClassInitialize(TestContext context)
     {
         var config = TestConfiguration.Load();
-        HttpClient = new HttpClient
+        HttpClient = new HttpClient(new HttpMessageLoggingHandler(new HttpClientHandler()))
         {
             BaseAddress = config.AzureApiManagementGatewayUrl
         };
