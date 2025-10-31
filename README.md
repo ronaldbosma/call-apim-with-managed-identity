@@ -106,6 +106,8 @@ azd down --purge
 The repository consists of the following files and directories:
 
 ```
+├── .azdo                    
+│   └── pipelines              [ Azure DevOps pipeline(s) ]
 ├── .github                    
 │   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
@@ -167,9 +169,12 @@ The pipeline consists of the following jobs:
 
   ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
 
+> [!NOTE]
+> An Azure DevOps pipeline is also included in [.azdo/pipelines/azure-dev.yml](.azdo/pipelines/azure-dev.yml) that implements the same jobs as the GitHub Actions workflow.
+
 ### Setting Up the Pipeline
 
-To set up the pipeline in your own repository, run the following command:
+To set up the pipeline in your own repository, run the following command (add ` --provider azdo` if you want to create an Azure DevOps pipeline):
 
 ```cmd
 azd pipeline config
@@ -183,7 +188,8 @@ After the service principal has been created:
 
 For detailed guidance, refer to:
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
-- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)
+- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)  
+  or [Create an Azure DevOps CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-azure-pipelines)
 
 > [!TIP]
 > By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
