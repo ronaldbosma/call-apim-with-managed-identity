@@ -1,0 +1,299 @@
+parameters:
+- name: cleanupResources
+  displayName: 'Clean up resources after deployment'
+  type: boolean
+  default: true
+
+trigger: none
+
+# Triggers only if this pipeline file is modified in a pull request to main
+# All other changes are verified using the GitHub Actions workflow.
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - '.azdo/pipelines/azure-dev.yml'
+
+variables:
+  # Disable user access to the deployed API by default; Only the pipeline needs access in most scenarios.
+  ALLOW_API_ACCESS_FOR_USERS: false
+
+stages:
+
+# ------------------------------------------------------------
+# Build Stage
+# ------------------------------------------------------------
+
+- stage: Build
+  displayName: 'Build, Verify and Package'
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+  - job: build_verify_package
+    displayName: 'Build, Verify and Package'
+    steps:
+    # The task setup-azd@1 needs to be manually installed in your organization
+    # If you can't install it, you can use the below script to install azd
+    - task: setup-azd@1
+      displayName: Install azd
+
+    # If you can't install the above task in your organization, you can remove it and uncomment the task below to install azd
+    # Make sure to replace the setup-azd task with this script in all jobs that need azd
+    # - pwsh: |
+    #     Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression
+    #   displayName: 'Install azd'
+
+    - task: UseDotNet@2
+      displayName: 'Setup .NET 9'
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
+
+    # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
+    - task: NodeTool@0
+      displayName: 'Setup Node.js'
+      inputs:
+        versionSpec: '>=25.0.0'
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - pwsh: |
+        azd env new $(AZURE_ENV_NAME)
+      displayName: 'Create azd env'
+
+    - pwsh: |
+          az version
+          az bicep version
+          azd version
+      displayName: 'Print Tool Versions'
+
+    - pwsh: |
+        az bicep lint --file ./infra/main.bicep
+      displayName: 'Bicep Lint'
+
+    - pwsh: |
+        New-Item -ItemType Directory -Path ./artifacts -Force
+      displayName: 'Create artifacts folder'
+
+    - pwsh: |
+        azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
+      displayName: 'Package Function App'
+
+    - pwsh: |
+        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+      displayName: 'Package Logic App'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Integration Tests'
+      inputs:
+        command: 'build'
+        projects: './tests/IntegrationTests/IntegrationTests.csproj'
+        arguments: '--configuration Release --output ./artifacts/integration-tests'
+
+    - publish: './artifacts/functionapp-package.zip'
+      displayName: 'Upload Function App Package'
+      artifact: 'functionapp-package'
+
+    - publish: './artifacts/logicapp-package.zip'
+      displayName: 'Upload Logic App Package'
+      artifact: 'logicapp-package'
+
+    - publish: './artifacts/integration-tests/'
+      displayName: 'Upload Integration Tests Package'
+      artifact: 'integration-tests-package'
+
+
+# ------------------------------------------------------------
+# Deploy Stage
+# ------------------------------------------------------------
+
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+  condition: succeeded()
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+  
+  # Deploy Job
+  # ----------------------------------------------------------
+
+  - job: deploy
+    displayName: 'Deploy to Azure'
+    steps:
+    - task: setup-azd@1
+      displayName: Install azd
+
+    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
+    - pwsh: |
+        azd config set auth.useAzCliAuth "true"
+      displayName: 'Configure azd to use Azure CLI Authentication'
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - pwsh: |
+        azd env new $(AZURE_ENV_NAME)
+      displayName: 'Create azd env'
+
+    - task: AzureCLI@2
+      displayName: 'Provision Infrastructure'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore' # Use PowerShell Core because the azd hooks are written in PowerShell
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          azd provision --no-prompt
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Function App Package'
+      inputs:
+        buildType: 'current'
+        artifactName: 'functionapp-package'
+        targetPath: './artifacts'
+
+    - task: AzureCLI@2
+      displayName: 'Deploy Function App'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Logic App Package'
+      inputs:
+        buildType: 'current'
+        artifactName: 'logicapp-package'
+        targetPath: './artifacts'
+
+    - task: AzureCLI@2
+      displayName: 'Deploy Logic App'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+
+    # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
+    - pwsh: |
+        $variableNames = @(
+          "AZURE_TENANT_ID",
+          "AZURE_ENV_ID",
+          "AZURE_RESOURCE_GROUP", 
+          "AZURE_API_MANAGEMENT_GATEWAY_URL",
+          "AZURE_FUNCTION_APP_ENDPOINT",
+          "AZURE_LOGIC_APP_NAME",
+          "ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI"
+        )
+        
+        foreach ($varName in $variableNames) {
+          $value = azd env get-values --output json | ConvertFrom-Json | Select-Object -ExpandProperty $varName -ErrorAction SilentlyContinue
+          if ($value) {
+            Write-Host "##vso[task.setvariable variable=$varName;isOutput=true]$value"
+            Write-Host "Set output variable $varName"
+          }
+        }
+      displayName: 'Get Output Variables'
+      name: 'outputVars'
+
+  # Integration Tests Job
+  # ----------------------------------------------------------
+
+  - job: integration_tests
+    displayName: 'Execute Integration Tests'
+    dependsOn: deploy
+    condition: succeeded()
+    variables:
+      # Configure the necessary deployed resource properties as environment variables so the integration tests can access them.
+      AZURE_TENANT_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_TENANT_ID'] ]
+      AZURE_ENV_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
+      AZURE_RESOURCE_GROUP: $[ dependencies.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
+      AZURE_API_MANAGEMENT_GATEWAY_URL: $[ dependencies.deploy.outputs['outputVars.AZURE_API_MANAGEMENT_GATEWAY_URL'] ]
+      AZURE_FUNCTION_APP_ENDPOINT: $[ dependencies.deploy.outputs['outputVars.AZURE_FUNCTION_APP_ENDPOINT'] ]
+      AZURE_LOGIC_APP_NAME: $[ dependencies.deploy.outputs['outputVars.AZURE_LOGIC_APP_NAME'] ]
+      ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: $[ dependencies.deploy.outputs['outputVars.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI'] ]
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Setup .NET 9'
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Integration Tests Package'
+      inputs:
+        buildType: 'current'
+        artifactName: 'integration-tests-package'
+        targetPath: './artifacts/integration-tests'
+
+    # Use AzureCLI task to authenticate via service connection with federated credentials.
+    # This is necessary for the integration test to access Azure resources if needed.
+    - task: AzureCLI@2
+      displayName: 'Run Integration Tests'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      condition: always()
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(System.DefaultWorkingDirectory)/artifacts/integration-tests/TestResults' 
+        failTaskOnFailedTests: true
+
+
+# ------------------------------------------------------------
+# Cleanup Stage
+# ------------------------------------------------------------
+
+- stage: Cleanup
+  displayName: 'Clean Up Resources'
+  dependsOn: 
+    - Deploy
+  condition: and(succeeded(), eq(${{ parameters.cleanupResources }}, true))
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+  - job: cleanup
+    displayName: 'Clean Up Resources'
+    variables:
+      # Configure the deployed resource identifiers as environment variables so azd hooks can access them
+      # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
+      AZURE_ENV_ID: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
+      AZURE_RESOURCE_GROUP: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
+    steps:
+    - task: setup-azd@1
+      displayName: Install azd
+
+    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
+    - pwsh: |
+        azd config set auth.useAzCliAuth "true"
+      displayName: 'Configure azd to use Azure CLI Authentication'
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - pwsh: |
+        azd env new $(AZURE_ENV_NAME)
+      displayName: 'Create azd env'
+
+    # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
+    - task: AzureCLI@2
+      displayName: 'Cleanup Resources'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore' # Use PowerShell Core because the azd hooks are written in PowerShell
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          azd down --purge --force --no-prompt
