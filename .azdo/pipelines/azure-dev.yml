@@ -74,6 +74,20 @@ stages:
         az bicep lint --file ./infra/main.bicep
       displayName: 'Bicep Lint'
 
+    - task: AzureCLI@2
+      displayName: 'Validate Template'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore' # Use PowerShell Core because the azd hooks are written in PowerShell
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub validate `
+            --template-file './infra/main.bicep' `
+            --location $(AZURE_LOCATION) `
+            --parameters environmentName=$(AZURE_ENV_NAME) `
+                        location=$(AZURE_LOCATION) `
+                        allowApiAccessForUsers=$(ALLOW_API_ACCESS_FOR_USERS)
+
     - pwsh: |
         New-Item -ItemType Directory -Path ./artifacts -Force
       displayName: 'Create artifacts folder'
