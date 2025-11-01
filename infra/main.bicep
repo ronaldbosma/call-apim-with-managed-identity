@@ -42,8 +42,7 @@ var resourceGroupName = getResourceName('resourceGroup', environmentName, locati
 
 var apiManagementSettings = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
-  publisherName: 'admin@example.org'
-  publisherEmail: 'admin@example.org'
+  sku: 'Consumption'
   appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
   appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
