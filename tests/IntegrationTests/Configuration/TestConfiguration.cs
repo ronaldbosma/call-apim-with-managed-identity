@@ -1,4 +1,3 @@
-using IntegrationTests.Configuration.Azd;
 using Microsoft.Extensions.Configuration;
 
 namespace IntegrationTests.Configuration;
@@ -10,9 +9,10 @@ internal class TestConfiguration
 {
     private static readonly Lazy<TestConfiguration> _instance = new(() =>
     {
+        AzdDotEnv.Load(optional: true); // Loads Azure Developer CLI environment variables; optional since .env file might be missing in CI/CD pipelines
+
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
-            .AddAzdEnvironmentVariables(optional: true) // Adds Azure Developer CLI environment variables; optional since CI/CD pipelines may use standard environment variables instead
             .Build();
 
         return new TestConfiguration

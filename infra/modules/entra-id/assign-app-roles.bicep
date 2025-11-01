@@ -24,7 +24,7 @@ param clientServicePrincipalId string
 // Variables
 //=============================================================================
 
-var rolesToAssign = [
+var rolesToAssign string[] = [
   'Sample.Read'
   'Sample.Write'
 ]

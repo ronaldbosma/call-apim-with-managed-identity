@@ -37,7 +37,7 @@ stages:
     # The task setup-azd@1 needs to be manually installed in your organization
     # If you can't install it, you can use the below script to install azd
     - task: setup-azd@1
-      displayName: Install azd
+      displayName: 'Install azd'
 
     # If you can't install the above task in your organization, you can remove it and uncomment the task below to install azd
     # Make sure to replace the setup-azd task with this script in all jobs that need azd
@@ -73,6 +73,20 @@ stages:
     - pwsh: |
         az bicep lint --file ./infra/main.bicep
       displayName: 'Bicep Lint'
+
+    - task: AzureCLI@2
+      displayName: 'Validate Template'
+      inputs:
+        azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub validate `
+            --template-file './infra/main.bicep' `
+            --location $(AZURE_LOCATION) `
+            --parameters environmentName=$(AZURE_ENV_NAME) `
+                        location=$(AZURE_LOCATION) `
+                        allowApiAccessForUsers=$(ALLOW_API_ACCESS_FOR_USERS)
 
     - pwsh: |
         New-Item -ItemType Directory -Path ./artifacts -Force
@@ -125,7 +139,7 @@ stages:
     displayName: 'Deploy to Azure'
     steps:
     - task: setup-azd@1
-      displayName: Install azd
+      displayName: 'Install azd'
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - pwsh: |
@@ -274,7 +288,7 @@ stages:
       AZURE_RESOURCE_GROUP: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
     steps:
     - task: setup-azd@1
-      displayName: Install azd
+      displayName: 'Install azd'
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - pwsh: |
