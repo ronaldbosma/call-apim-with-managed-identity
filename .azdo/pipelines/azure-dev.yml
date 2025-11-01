@@ -78,7 +78,7 @@ stages:
       displayName: 'Validate Template'
       inputs:
         azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
-        scriptType: 'pscore' # Use PowerShell Core because the azd hooks are written in PowerShell
+        scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment sub validate `
