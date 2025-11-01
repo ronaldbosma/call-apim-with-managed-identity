@@ -28,7 +28,7 @@ param appInsightsName string
 // Variables
 //=============================================================================
 
-var serviceTags = union(tags, {
+var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'apim'
 })
 

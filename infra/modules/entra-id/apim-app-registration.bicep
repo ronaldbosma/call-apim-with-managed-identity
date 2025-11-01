@@ -39,7 +39,12 @@ param allowApiAccessForUsers bool
 // Variables
 //=============================================================================
 
-var appRoles = [
+type appRoleType = {
+  name: string
+  description: string
+}
+
+var appRoles appRoleType[] = [
   {
     name: 'Sample.Read'
     description: 'Sample read application role'
@@ -54,7 +59,7 @@ var appRoles = [
   }
 ]
 
-var apiAccessScope = 'API.Access'
+var apiAccessScope string = 'API.Access'
 
 //=============================================================================
 // Resources

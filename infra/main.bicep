@@ -10,6 +10,7 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
+import { apiManagementSettingsType, appInsightsSettingsType, functionAppSettingsType, logicAppSettingsType } from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -36,42 +37,42 @@ param allowApiAccessForUsers bool
 //=============================================================================
 
 // Determine the instance id based on the provided instance or by generating a new one
-var instanceId = getInstanceId(environmentName, location, instance)
+var instanceId string = getInstanceId(environmentName, location, instance)
 
-var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
+var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = {
+var apiManagementSettings apiManagementSettingsType = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   sku: 'Consumption'
   appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
   appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
 
-var appInsightsSettings = {
+var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
-var functionAppSettings = {
+var functionAppSettings functionAppSettingsType = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
 }
 
-var logicAppSettings = {
+var logicAppSettings logicAppSettingsType = {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
 }
 
-var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
+var storageAccountName string = getResourceName('storageAccount', environmentName, location, instanceId)
 
 // Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
-var azdEnvironmentId = getResourceName('azdEnvironment', environmentName, location, instanceId)
+var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags = {
+var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-with-managed-identity'
