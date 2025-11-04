@@ -66,7 +66,8 @@ namespace IntegrationTests.Clients
             // Use either the Azure CLI or Azure Developer CLI credentials when using the ARM API
             var tokenCredential = new ChainedTokenCredential(
                 new AzureCliCredential(),
-                // Tenant ID needs to be configured explicitly for azd icm with this client, otherwise it'll use the Microsoft Service's Microsoft Entra tenant ID
+                // In some cases the Tenant ID needs to be configured explicitly for azd icm with this client,
+                // otherwise it might use the Microsoft Service's Microsoft Entra tenant ID
                 new AzureDeveloperCliCredential(new AzureDeveloperCliCredentialOptions { TenantId = _tenantId })
             );
             var armClient = new ArmClient(tokenCredential);
