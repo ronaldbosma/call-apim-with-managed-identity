@@ -31,7 +31,8 @@ If you can't use a managed identity, have a look at [Call API Management backend
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
 
 
-This repository also includes a complete CI/CD pipeline using GitHub Actions or Azure DevOps that automates the build, deployment, testing and cleanup process. The pipelines demonstrate how to call OAuth-protected APIs from a CI/CD pipeline using federated credentials, eliminating the need for secrets in your automation workflows.
+This repository also includes CI/CD pipelines using GitHub Actions and Azure DevOps that automate the build, deployment, testing and cleanup process. 
+These pipelines demonstrate how to call OAuth-protected APIs from a CI/CD pipeline using federated credentials, eliminating the need for secrets in your automation workflows.
 
 ![Overview](images/diagrams-overview-pipelines.png)
 
