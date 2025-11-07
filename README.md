@@ -31,6 +31,17 @@ If you can't use a managed identity, have a look at [Call API Management backend
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
 
 
+This repository also includes a complete CI/CD pipeline using GitHub Actions or Azure DevOps that automates the build, deployment, testing and cleanup process. The pipelines demonstrate how to call OAuth-protected APIs from a CI/CD pipeline using federated credentials, eliminating the need for secrets in your automation workflows.
+
+![Overview](images/diagrams-overview-pipelines.png)
+
+Pipeline scenarios include:
+- [Call OAuth-Protected APIs from GitHub Actions Using Federated Credentials](https://ronaldbosma.github.io/blog/2025/11/03/call-oauth-protected-apis-from-github-actions-using-federated-credentials/)
+- Call OAuth-Protected APIs from Azure DevOps Using Federated Credentials  _coming soon_
+
+See [pipeline](#pipeline) for more details.
+
+
 ## Getting Started
 
 ### Prerequisites  
