@@ -65,9 +65,9 @@ stages:
       displayName: 'Create azd env'
 
     - pwsh: |
-          az version
-          az bicep version
-          azd version
+        az version
+        az bicep version
+        azd version
       displayName: 'Print Tool Versions'
 
     - pwsh: |
@@ -85,8 +85,8 @@ stages:
             --template-file './infra/main.bicep' `
             --location $(AZURE_LOCATION) `
             --parameters environmentName=$(AZURE_ENV_NAME) `
-                        location=$(AZURE_LOCATION) `
-                        allowApiAccessForUsers=$(ALLOW_API_ACCESS_FOR_USERS)
+                         location=$(AZURE_LOCATION) `
+                         allowApiAccessForUsers=$(ALLOW_API_ACCESS_FOR_USERS)
 
     - pwsh: |
         New-Item -ItemType Directory -Path ./artifacts -Force
