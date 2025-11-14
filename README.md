@@ -38,7 +38,7 @@ These pipelines demonstrate how to call OAuth-protected APIs from a CI/CD pipeli
 
 Pipeline scenarios include:
 - [Call OAuth-Protected APIs from GitHub Actions Using Federated Credentials](https://ronaldbosma.github.io/blog/2025/11/03/call-oauth-protected-apis-from-github-actions-using-federated-credentials/)
-- Call OAuth-Protected APIs from Azure DevOps Using Federated Credentials  -  _coming soon_
+- [Call OAuth-Protected APIs from Azure DevOps Using Federated Credentials](https://ronaldbosma.github.io/blog/2025/11/10/call-oauth-protected-apis-from-azure-devops-using-federated-credentials/)
 
 See [pipeline](#pipeline) for more details.
 
