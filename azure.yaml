@@ -2,7 +2,7 @@
 
 name: call-apim-with-managed-identity
 metadata:
-  template: tdd-call-apim-with-managed-identity@0.0.1
+  template: tdd-call-apim-with-managed-identity@1.0.0
 hooks:
   predown:
     - shell: pwsh
