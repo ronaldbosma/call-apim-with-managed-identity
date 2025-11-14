@@ -1,6 +1,6 @@
-# Call API Management with Managed Identity
+# Call OAuth-Protected APIs on API Management with Managed Identity
 
-An Azure Developer CLI (`azd`) template using Bicep that demonstrates how to call Azure API Management (APIM) from Azure Functions and Logic Apps using managed identity authentication with OAuth. It also shows how one APIM API can securely call another APIM API using its managed identity, enabling secret-free, secure authentication between Azure services.
+An Azure Developer CLI (`azd`) template using Bicep that demonstrates how to call OAuth-Protected APIs on Azure API Management (APIM) from Azure Functions and Logic Apps using managed identity authentication with OAuth. It also shows how one APIM API can securely call another APIM API using its managed identity, enabling secret-free, secure authentication between Azure services.
 
 ## Overview
 
