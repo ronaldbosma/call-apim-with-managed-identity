@@ -57,18 +57,18 @@ stages:
       inputs:
         versionSpec: '>=25.0.0'
 
+    - pwsh: |
+        az version
+        az bicep version
+        azd version
+      displayName: 'Print Tool Versions'
+
     # Ensure the azd environment is created before running subsequent azd commands.
     # This guarantees that any configured hooks are executed as expected.
     # See https://github.com/Azure/azure-dev/issues/3920 for more details.
     - pwsh: |
         azd env new $(AZURE_ENV_NAME)
       displayName: 'Create azd env'
-
-    - pwsh: |
-        az version
-        az bicep version
-        azd version
-      displayName: 'Print Tool Versions'
 
     - pwsh: |
         az bicep lint --file ./infra/main.bicep
