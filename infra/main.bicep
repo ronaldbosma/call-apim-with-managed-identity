@@ -28,6 +28,9 @@ param environmentName string
 @description('If true, allows API access for users by adding a scope to the API Management app registration.')
 param allowApiAccessForUsers bool
 
+@description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
+param serviceManagementReference string = ''
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -89,6 +92,7 @@ module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
     name: apiManagementSettings.appRegistrationName
     identifierUri: apiManagementSettings.appRegistrationIdentifierUri
     allowApiAccessForUsers: allowApiAccessForUsers
+    serviceManagementReference: serviceManagementReference
   }
 }
 
@@ -235,3 +239,6 @@ output AZURE_LOGIC_APP_ENDPOINT string = logicApp.outputs.endpoint
 
 // Return whether API access for users is allowed
 output ALLOW_API_ACCESS_FOR_USERS bool = allowApiAccessForUsers
+
+// Return the service management reference
+output AZURE_SERVICE_MANAGEMENT_REFERENCE string? = serviceManagementReference
