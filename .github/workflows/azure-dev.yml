@@ -63,6 +63,12 @@ jobs:
       with:
         node-version: 'latest'
 
+    - name: Print Tool Versions
+      run: |
+        az version
+        az bicep version
+        azd version
+
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - name: Configure azd to use Azure CLI Authentication
       run: |
@@ -81,12 +87,6 @@ jobs:
     # See https://github.com/Azure/azure-dev/issues/3920 for more details.
     - name: Create azd env
       run: azd env new $env:AZURE_ENV_NAME
-
-    - name: Print Tool Versions
-      run: |
-        az version
-        az bicep version
-        azd version
 
     - name: Bicep Lint
       run: |
