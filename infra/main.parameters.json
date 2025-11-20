@@ -10,6 +10,9 @@
     },
     "allowApiAccessForUsers": {
       "value": "${ALLOW_API_ACCESS_FOR_USERS=true}"
+    },
+    "serviceManagementReference": {
+      "value": "${AZURE_SERVICE_MANAGEMENT_REFERENCE}"
     }
   }
 }
