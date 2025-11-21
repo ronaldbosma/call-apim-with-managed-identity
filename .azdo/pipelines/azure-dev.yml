@@ -61,6 +61,9 @@ stages:
         az version
         az bicep version
         azd version
+        Write-Host ".NET SDK Version: $(dotnet --version)"
+        Write-Host "Node.js Version: $(node --version)"
+        Write-Host "npm Version: $(npm --version)"
       displayName: 'Print Tool Versions'
 
     # Ensure the azd environment is created before running subsequent azd commands.
