@@ -66,13 +66,6 @@ stages:
         Write-Host "npm Version: $(npm --version)"
       displayName: 'Print Tool Versions'
 
-    # Ensure the azd environment is created before running subsequent azd commands.
-    # This guarantees that any configured hooks are executed as expected.
-    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
-    - pwsh: |
-        azd env new $(AZURE_ENV_NAME)
-      displayName: 'Create azd env'
-
     - pwsh: |
         az bicep lint --file ./infra/main.bicep
       displayName: 'Bicep Lint'
@@ -148,13 +141,6 @@ stages:
     - pwsh: |
         azd config set auth.useAzCliAuth "true"
       displayName: 'Configure azd to use Azure CLI Authentication'
-
-    # Ensure the azd environment is created before running subsequent azd commands.
-    # This guarantees that any configured hooks are executed as expected.
-    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
-    - pwsh: |
-        azd env new $(AZURE_ENV_NAME)
-      displayName: 'Create azd env'
 
     - task: AzureCLI@2
       displayName: 'Provision Infrastructure'
@@ -297,13 +283,6 @@ stages:
     - pwsh: |
         azd config set auth.useAzCliAuth "true"
       displayName: 'Configure azd to use Azure CLI Authentication'
-
-    # Ensure the azd environment is created before running subsequent azd commands.
-    # This guarantees that any configured hooks are executed as expected.
-    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
-    - pwsh: |
-        azd env new $(AZURE_ENV_NAME)
-      displayName: 'Create azd env'
 
     # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
     - task: AzureCLI@2
