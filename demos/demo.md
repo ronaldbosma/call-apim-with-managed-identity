@@ -2,7 +2,7 @@
 
 This demo shows how to call Azure API Management (APIM) from Azure Functions and Logic Apps using managed identity authentication with OAuth. It also shows how one APIM API can securely call another APIM API using its managed identity, enabling secret-free, secure authentication between Azure services.
 
-The template deploys an Azure API Management service with two APIs: a protected backend API secured with OAuth and an unprotected public API that calls the protected API using API Management's system-assigned managed identity. It also deploys a .NET 9 Azure Function App and an Azure Logic App (Standard), both configured to call the protected API using their own system-assigned managed identities. Supporting resources such as Application Insights, a Log Analytics workspace, a Storage Account and Entra ID app registration are also provisioned. See the following diagram for an overview:
+The template deploys an Azure API Management service with two APIs: a protected backend API secured with OAuth and an unprotected public API that calls the protected API using API Management's system-assigned managed identity. It also deploys a .NET 10 Azure Function App and an Azure Logic App (Standard), both configured to call the protected API using their own system-assigned managed identities. Supporting resources such as Application Insights, a Log Analytics workspace, a Storage Account and Entra ID app registration are also provisioned. See the following diagram for an overview:
 
 ![Overview](https://raw.githubusercontent.com/ronaldbosma/call-apim-with-managed-identity/refs/heads/main/images/diagrams-overview.png)
 
