@@ -8,9 +8,6 @@ hooks:
     - shell: pwsh
       run: ./hooks/predown-remove-app-registrations.ps1
       interactive: true
-    - shell: pwsh
-      run: ./hooks/predown-remove-law.ps1
-      interactive: true
 services:
   functionApp:
     project: ./src/functionApp/FunctionApp
