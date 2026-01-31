@@ -310,4 +310,3 @@ jobs:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
         AZURE_ENV_ID: ${{ needs.deploy.outputs.AZURE_ENV_ID }}
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}

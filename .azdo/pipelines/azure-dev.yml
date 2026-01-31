@@ -274,7 +274,6 @@ stages:
       # Configure the deployed resource identifiers as environment variables so azd hooks can access them
       # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
       AZURE_ENV_ID: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
-      AZURE_RESOURCE_GROUP: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
     steps:
     - task: setup-azd@1
       displayName: 'Install azd'
