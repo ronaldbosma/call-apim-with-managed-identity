@@ -205,11 +205,11 @@ stages:
       displayName: 'Get Output Variables'
       name: 'outputVars'
 
-  # Integration Tests Job
+  # Verify Deployment Job
   # ----------------------------------------------------------
 
-  - job: integration_tests
-    displayName: 'Execute Integration Tests'
+  - job: verify_deployment
+    displayName: 'Verify Deployment'
     dependsOn: deploy
     condition: succeeded()
     variables:
