@@ -165,6 +165,17 @@ module logicApp 'modules/services/logic-app.bicep' = {
   ]
 }
 
+module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
+  scope: resourceGroup
+  params: {
+    principalId: deployer().objectId
+    appInsightsName: appInsightsSettings.appInsightsName
+  }
+  dependsOn: [
+    appInsights
+  ]
+}
+
 // Assign app roles to the deployer (the user or pipeline executing the deployment) so they can call the Protected API
 // These are configured for integration tests to demo the scenario where a user or pipeline calls on OAuth-Protected API using their own identity
 module assignAppRolesToDeployer 'modules/entra-id/assign-app-roles.bicep' = {

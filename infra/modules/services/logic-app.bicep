@@ -47,6 +47,7 @@ var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;Acco
 
 var appSettings object = {
   APP_KIND: 'workflowApp'
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
@@ -127,6 +128,17 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
     siteName: logicAppSettings.logicAppName
     currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
     newAppSettings: appSettings
+  }
+}
+
+
+// Assign roles to system-assigned identity of Logic App
+
+module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  params: {
+    principalId: logicApp.identity.principalId
+    principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
   }
 }
 
