@@ -123,6 +123,7 @@ The repository consists of the following files and directories:
 ```
 ├── .azdo
 │   └── pipelines              [ Azure DevOps pipeline(s) ]
+├── .devcontainer              [ Development container configuration files ]
 ├── .github
 │   └── workflows              [ GitHub Actions workflow(s) ]
 ├── .vscode                    [ Visual Studio Code configuration files ]
