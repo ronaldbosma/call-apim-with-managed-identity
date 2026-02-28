@@ -95,7 +95,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   }
 }
 
-
 // Create the Logic App
 
 resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
@@ -118,7 +117,6 @@ resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
   }
 }
 
-
 // Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
@@ -131,7 +129,6 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of Logic App
 
 module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
@@ -141,7 +138,6 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
     appInsightsName: appInsightsName
   }
 }
-
 
 // Assign app roles to the system-assigned managed identity of the Logic App
 

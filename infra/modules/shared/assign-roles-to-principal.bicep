@@ -36,7 +36,11 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, appInsights.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher))
+  name: guid(
+    principalId,
+    appInsights.id,
+    subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher)
+  )
   scope: appInsights
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher)

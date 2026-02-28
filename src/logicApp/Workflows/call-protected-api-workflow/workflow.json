@@ -10,10 +10,7 @@
                     "body": "@if(equals(outputs('HTTP')?['statusCode'],null), result('Scope'), body('HTTP'))"
                 },
                 "runAfter": {
-                    "Scope": [
-                        "SUCCEEDED",
-                        "FAILED"
-                    ]
+                    "Scope": ["SUCCEEDED", "FAILED"]
                 }
             },
             "Scope": {

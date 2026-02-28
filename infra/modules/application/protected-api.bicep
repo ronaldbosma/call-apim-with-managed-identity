@@ -55,12 +55,12 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' 
   properties: {
     displayName: 'Protected API'
     path: 'protected'
-    protocols: [ 
-      'https' 
+    protocols: [
+      'https'
     ]
     subscriptionRequired: false // API is protected with OAuth
   }
-  
+
   resource policies 'policies' = {
     name: 'policy'
     properties: {

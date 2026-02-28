@@ -54,7 +54,7 @@ var appSettings object = {
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
   WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
   WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
-  
+
   // API Management App Settings
   ApiManagement__GatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings.serviceName)
   ApiManagement__OAuthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
@@ -90,7 +90,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   properties: {}
 }
 
-
 // Create the Function App
 
 resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
@@ -113,7 +112,6 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   }
 }
 
-
 // Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
@@ -126,7 +124,6 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of Function App
 
 module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
@@ -136,7 +133,6 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
     appInsightsName: appInsightsName
   }
 }
-
 
 // Assign app roles to the system-assigned managed identity of the Function App
 

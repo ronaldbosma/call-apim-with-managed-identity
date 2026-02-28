@@ -1,15 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "replacements:all",
-    "workarounds:all",
-    "group:all"
-  ],
+  "extends": ["replacements:all", "workarounds:all", "group:all"],
   "packageRules": [
     {
-      "matchDatasources": [
-        "azure-pipelines-tasks"
-      ],
+      "matchDatasources": ["azure-pipelines-tasks"],
       "extractVersion": "^(?<version>\\d+)"
     },
     {

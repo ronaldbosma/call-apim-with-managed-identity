@@ -1,8 +1,9 @@
-﻿using Azure.Identity;
-using Azure.ResourceManager;
-using Azure.ResourceManager.AppService;
 using System.Text;
 using System.Text.Json;
+
+using Azure.Identity;
+using Azure.ResourceManager;
+using Azure.ResourceManager.AppService;
 
 namespace IntegrationTests.Clients
 {
@@ -100,7 +101,7 @@ namespace IntegrationTests.Clients
             ObjectDisposedException.ThrowIf(_disposed, this);
 
             var httpClient = await _httpClientLazy.Value;
-            
+
             var requestUri = string.Empty; // The callback URL is already set as the BaseAddress
 
             var json = JsonSerializer.Serialize(data);
