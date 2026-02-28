@@ -19,7 +19,6 @@ type apiManagementSettingsType = {
   appRegistrationIdentifierUri: string
 }
 
-
 // Application Insights
 
 @description('Retention options for Application Insights')
@@ -38,7 +37,6 @@ type appInsightsSettingsType = {
   retentionInDays: appInsightsRetentionInDaysType
 }
 
-
 // Function App
 
 @description('The settings for the Function App')
@@ -53,7 +51,6 @@ type functionAppSettingsType = {
   @description('The .NET Framework version for the Function App')
   netFrameworkVersion: string
 }
-
 
 // Logic App
 

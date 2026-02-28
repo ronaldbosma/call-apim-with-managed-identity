@@ -184,7 +184,7 @@ module assignAppRolesToDeployer 'modules/entra-id/assign-app-roles.bicep' = {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
     clientServicePrincipalId: deployer().objectId
   }
-  
+
   dependsOn: [
     apimAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registration.

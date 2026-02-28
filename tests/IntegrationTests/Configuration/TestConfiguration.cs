@@ -34,8 +34,8 @@ internal class TestConfiguration
     public required string AzureSubscriptionId { get; init; }
     public required string AzureResourceGroup { get; init; }
     public required string AzureLogicAppName { get; init; }
-    
-    public required string OAuthTargetResource {  get; init; }
+
+    public required string OAuthTargetResource { get; init; }
 
     public static TestConfiguration Load() => _instance.Value;
 }

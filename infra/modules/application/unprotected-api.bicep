@@ -47,22 +47,21 @@ resource localhostBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-p
     // For APIM instances running inside a VNet, you would typically use https://localhost as the backend URL.
     url: apiManagementService.properties.gatewayUrl
     protocol: 'http'
-    
+
     // Note: The Host header configuration is only necessary when the backend URL is set to https://localhost.
     // For public gateway URLs, this configuration can be omitted.
-    credentials : {
+    credentials: {
       header: {
-        Host: [ parseUri(apiManagementService.properties.gatewayUrl).host ]
+        Host: [parseUri(apiManagementService.properties.gatewayUrl).host]
       }
     }
-    
+
     tls: {
       validateCertificateChain: true
       validateCertificateName: true
     }
   }
 }
-
 
 // API
 
@@ -72,12 +71,12 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview
   properties: {
     displayName: 'Unprotected API'
     path: 'unprotected'
-    protocols: [ 
-      'https' 
+    protocols: [
+      'https'
     ]
     subscriptionRequired: false // API is unprotected
   }
-  
+
   resource policies 'policies' = {
     name: 'policy'
     properties: {

@@ -1,6 +1,7 @@
+using FunctionApp;
+
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Hosting;
-using FunctionApp;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 

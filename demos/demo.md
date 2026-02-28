@@ -18,7 +18,6 @@ The following app registration is created in your Entra ID tenant:
 
 The deployed resources follow the naming convention: `<resource-type>-<environment-name>-<region>-<instance>`.
 
-
 ## 2. What you can demo after deployment
 
 ### Review the configuration
@@ -33,18 +32,18 @@ You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/c
 
 **App registration**
 
-The [apim-app-registration.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/entra-id/apim-app-registration.bicep) file creates an Entra ID app registration for the protected API. 
+The [apim-app-registration.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/entra-id/apim-app-registration.bicep) file creates an Entra ID app registration for the protected API.
 This app registration defines the Application ID URI (used as the OAuth audience) and the available app roles (`Sample.Read`, `Sample.Write`, `Sample.Delete`).
 
 **Role assignment configuration**
 
 The [assign-app-roles.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/entra-id/assign-app-roles.bicep) file assigns the `Sample.Read` and `Sample.Write` roles to the various managed identities:
+
 - API Management system-assigned managed identity
-- Function App system-assigned managed identity  
+- Function App system-assigned managed identity
 - Logic App system-assigned managed identity
 
 Note that none of the managed identities receive the `Sample.Delete` role, which is why DELETE operations will fail with 401 Unauthorized.
-
 
 ### Scenario 1: Call unprotected API that calls protected API using APIM managed identity
 
@@ -70,6 +69,7 @@ Note how the access token is retrieved during the first GET request and then cac
 The unprotected API uses the `authentication-managed-identity` policy to automatically obtain an access token using API Management's system-assigned managed identity. You can see this simple but powerful implementation in [unprotected-api.xml](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/application/unprotected-api.xml).
 
 The policy:
+
 - Uses `set-backend-service` with `backend-id="localhost"` to forward requests to the protected API hosted on the same API Management instance
 - Uses `rewrite-uri` to change the path to `/protected`
 - Uses `authentication-managed-identity` to authenticate with the managed identity
@@ -78,7 +78,6 @@ The policy:
 **Review the localhost backend configuration**
 
 The localhost backend is defined in [unprotected-api.bicep](https://github.com/ronaldbosma/call-apim-with-managed-identity/blob/main/infra/modules/application/unprotected-api.bicep). This backend enables the unprotected API to call other APIs hosted within the same API Management instance. The configuration uses the API Management service's public gateway URL as the backend URL and includes proper Host header configuration to ensure requests are routed correctly within the same APIM instance.
-
 
 ### Scenario 2: Azure Function calls protected API using its managed identity
 
@@ -122,7 +121,6 @@ The Azure Function uses a custom `HttpMessageHandler` to automatically add OAuth
    - Adds the `AzureCredentialsAuthorizationHandler` to the HttpClient pipeline using `AddHttpMessageHandler`
    - This ensures that every request made with this HttpClient automatically includes the OAuth token
 
-
 ### Scenario 3: Logic App workflow calls protected API using its managed identity
 
 **Execute the scenario**
@@ -151,11 +149,13 @@ Note how the access token is retrieved during the first GET request and then cac
 **Review the workflow configuration**
 
 Navigate to your Logic App resource in the Azure portal and open the `call-protected-api-workflow` workflow. You'll see a workflow that:
+
 - Receives the HTTP method as input
 - Makes an HTTP request to the protected API
 - Uses the Logic App's system-assigned managed identity for authentication
 
 In the HTTP action configuration, you'll see:
-- The authentication type is set to "Managed Identity"  
+
+- The authentication type is set to "Managed Identity"
 - The resource/audience is configured to match the protected API's expected audience, which is the `Application ID URI` of the app registration
 - The Logic App automatically handles token acquisition and renewal

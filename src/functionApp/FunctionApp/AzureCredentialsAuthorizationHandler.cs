@@ -1,6 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
+
+using Azure.Core;
+
+using Microsoft.Extensions.Options;
 
 namespace FunctionApp
 {

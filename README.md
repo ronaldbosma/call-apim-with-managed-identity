@@ -1,6 +1,6 @@
 # Call OAuth-Protected APIs on API Management with Managed Identity
 
-An Azure Developer CLI (`azd`) template using Bicep that demonstrates how to call OAuth-Protected APIs on Azure API Management (APIM) from Azure Functions and Logic Apps using managed identity authentication with OAuth. 
+An Azure Developer CLI (`azd`) template using Bicep that demonstrates how to call OAuth-Protected APIs on Azure API Management (APIM) from Azure Functions and Logic Apps using managed identity authentication with OAuth.
 It also shows how one APIM API can securely call another APIM API using its managed identity, enabling secret-free, secure authentication between Azure services.
 Additionally, the repository includes CI/CD pipelines that demonstrate how to call OAuth-protected APIs from a CI/CD pipeline using federated credentials.
 
@@ -20,9 +20,10 @@ This template deploys the following resources:
 
 - **Supporting resources**: Application Insights, Log Analytics workspace, Storage Account, and Entra ID app registrations
 
-The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates. 
-This approach provides better security and eliminates the need to manage and rotate secrets. 
+The template demonstrates how to authenticate between Azure services using managed identities instead of client secrets or certificates.
+This approach provides better security and eliminates the need to manage and rotate secrets.
 Supported scenarios include:
+
 - [Call OAuth-Protected APIs with Managed Identity from API Management](https://ronaldbosma.github.io/blog/2025/09/29/call-oauth-protected-apis-with-managed-identity-from-api-management/)
 - [Call OAuth-Protected APIs with Managed Identity from Azure Functions (.NET)](https://ronaldbosma.github.io/blog/2025/09/20/call-oauth-protected-apis-with-managed-identity-from-.net/)
 - [Call OAuth-Protected APIs with Managed Identity from Logic Apps](https://ronaldbosma.github.io/blog/2025/09/24/call-oauth-protected-apis-with-managed-identity-from-logic-apps/)
@@ -32,73 +33,74 @@ If you can't use a managed identity, have a look at [Call API Management backend
 > [!IMPORTANT]  
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
 
-
-This repository also includes CI/CD pipelines using GitHub Actions and Azure DevOps that automate the build, deployment, testing and cleanup process. 
+This repository also includes CI/CD pipelines using GitHub Actions and Azure DevOps that automate the build, deployment, testing and cleanup process.
 These pipelines demonstrate how to call OAuth-protected APIs from a CI/CD pipeline using federated credentials, eliminating the need for secrets in your automation workflows.
 
 ![Overview](images/diagrams-overview-pipelines.png)
 
 Pipeline scenarios include:
+
 - [Call OAuth-Protected APIs from GitHub Actions Using Federated Credentials](https://ronaldbosma.github.io/blog/2025/11/03/call-oauth-protected-apis-from-github-actions-using-federated-credentials/)
 - [Call OAuth-Protected APIs from Azure DevOps Using Federated Credentials](https://ronaldbosma.github.io/blog/2025/11/10/call-oauth-protected-apis-from-azure-devops-using-federated-credentials/)
 
 See [pipeline](#pipeline) for more details.
 
-
 ## Getting Started
 
-### Prerequisites  
+### Prerequisites
 
 Before you can deploy this template, make sure you have the following tools installed and the necessary permissions:
 
 **Required Tools:**
+
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
-  Installing `azd` also installs the following tools:  
-  - [GitHub CLI](https://cli.github.com)  
-  - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)  
-- [npm CLI](https://nodejs.org/) 
+  Installing `azd` also installs the following tools:
+  - [GitHub CLI](https://cli.github.com)
+  - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- [npm CLI](https://nodejs.org/)
   _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - This template includes several hooks that run at different stages of the deployment process and require the following tools. For more details, see [Hooks](#hooks).
   - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
   - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 **Required Permissions:**
+
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template
-- You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations 
+- You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
 
 ### Deployment
 
 Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
 
-1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
+1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
 
-    ```cmd
-    azd init --template ronaldbosma/call-apim-with-managed-identity
-    ```
+   ```cmd
+   azd init --template ronaldbosma/call-apim-with-managed-identity
+   ```
 
-    When prompted, specify the name of the environment (for example, `managedidentity`). The maximum length is 32 characters.
+   When prompted, specify the name of the environment (for example, `managedidentity`). The maximum length is 32 characters.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription using the **Azure Developer CLI** _(if you haven't already)_.
 
-    ```cmd
-    azd auth login
-    ```
+   ```cmd
+   azd auth login
+   ```
 
 1. Run the `az login` command to authenticate to your Azure subscription using the **Azure CLI** _(if you haven't already)_. This is required for the [hooks](#hooks) to function properly. Make sure to log into the same tenant as the Azure Developer CLI.
 
-    ```cmd
-    az login
-    ```
+   ```cmd
+   az login
+   ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription and Entra ID tenant. This deployment typically takes around 7 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
 
-    ```cmd
-    azd up
-    ```
+   ```cmd
+   azd up
+   ```
 
-    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
+   See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
@@ -114,22 +116,21 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 azd down --purge
 ```
 
-
 ## Contents
 
 The repository consists of the following files and directories:
 
 ```
-├── .azdo                    
+├── .azdo
 │   └── pipelines              [ Azure DevOps pipeline(s) ]
-├── .github                    
+├── .github
 │   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README and demo guide ]
 ├── infra                      [ Infrastructure As Code files ]
 │   ├── functions              [ Bicep user-defined functions ]
-│   ├── modules                
+│   ├── modules
 │   │   ├── application        [ Protected and unprotected APIs ]
 │   │   ├── entra-id           [ Modules for all Entra ID resources ]
 │   │   └── services           [ Modules for all Azure services ]
@@ -137,16 +138,15 @@ The repository consists of the following files and directories:
 │   ├── types                  [ Bicep user-defined types ]
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
-├── src                        
+├── src
 │   ├── functionApp            [ Azure Function that calls the protected API ]
 │   └── logicApp               [ Logic App workflow that calls the protected API ]
-├── tests                      
+├── tests
 │   ├── IntegrationTests       [ Integration tests for automatically verifying different scenarios ]
 │   └── *.http                 [ HTTP request files for testing different scenarios ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
 ```
-
 
 ## Hooks
 
@@ -156,11 +156,10 @@ This template has several hooks that are executed at different stages of the dep
 
 These PowerShell scripts are executed before the resources are removed.
 
-- [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
-  Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
-  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724. 
+- [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1):
+  Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet.
+  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
   The Entra ID resources have a custom tag `azd-env-id: <environment-id>`, so we can find and delete them.
-
 
 ## Pipeline
 
@@ -173,7 +172,7 @@ The pipeline consists of the following jobs:
 - **Build, Verify and Package**: This job sets up the build environment, validates the Bicep template and packages the Function App, Logic App and integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
 - **Verify Deployment**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality.
-- **Clean Up Resources**: This job removes all deployed Azure resources.  
+- **Clean Up Resources**: This job removes all deployed Azure resources.
 
   By default, cleanup runs automatically after the deployment. This can be disabled via an input parameter when the workflow is triggered manually.
 
@@ -193,10 +192,12 @@ azd pipeline config
 Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline, and only a **service principal** can be granted the necessary permissions in Entra ID.
 
 After the service principal has been created:
+
 - Add the Microsoft Graph permissions **Application.ReadWrite.All**, **AppRoleAssignment.ReadWrite.All** and **DelegatedPermissionGrant.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. Use the **application permissions** type, not delegated permissions type. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
 - Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role if it's not already assigned. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
 
 For detailed guidance, refer to:
+
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
 - [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)  
   or [Create an Azure DevOps CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-azure-pipelines)
@@ -207,16 +208,15 @@ For detailed guidance, refer to:
 > [!NOTE]
 > In the GitHub Actions workflow, the environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
 
-
 ## Integration Tests
 
 The project includes integration tests built with **.NET 10** that validate various scenarios through the deployed Azure services. The tests implement the same scenarios described in the [Demo](./demos/demo.md) and are located in [IntegrationTests](tests/IntegrationTests).
 
 Some things to note about the integration tests:
+
 - The tests automatically locate your azd environment's `.env` file if available, to retrieve necessary configuration. In the [pipeline](#pipeline) they rely on environment variables set in the workflow.
 - The [Logic App integration tests](./tests/IntegrationTests/LogicAppTests.cs) use [Azure.ResourceManager.AppService](https://learn.microsoft.com/en-us/dotnet/api/azure.resourcemanager.appservice?view=azure-dotnet) to retrieve the Logic App workflow callback URL, leveraging Azure CLI or Azure Developer CLI authentication.
 - The [Pipeline integration tests](./tests/IntegrationTests/PipelineCredentialsTests.cs) use Azure CLI or Azure Developer CLI credentials to call the OAuth-protected API directly.
-
 
 ## Troubleshooting
 
@@ -226,15 +226,15 @@ If you've previously deployed this template and deleted the resources, you may e
 
 ```json
 {
-    "code": "DeploymentFailed",
-    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-managedidentity-nwe-i2jdr/providers/Microsoft.Resources/deployments/apiManagement",
-    "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
-    "details": [
-        {
-            "code": "ServiceAlreadyExistsInSoftDeletedState",
-            "message": "Api service apim-managedidentity-nwe-i2jdr was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
-        }
-    ]
+  "code": "DeploymentFailed",
+  "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-managedidentity-nwe-i2jdr/providers/Microsoft.Resources/deployments/apiManagement",
+  "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+  "details": [
+    {
+      "code": "ServiceAlreadyExistsInSoftDeletedState",
+      "message": "Api service apim-managedidentity-nwe-i2jdr was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+    }
+  ]
 }
 ```
 
@@ -302,9 +302,9 @@ If you're deploying this template in such an environment, you may encounter the 
 ```
 ERROR: error executing step command 'provision': deployment failed: error deploying infrastructure: deploying to subscription:
 Deployment Error Details:
-BadRequest: ServiceManagementReference field is required for Update, but is missing in the request. 
-Refer to the TSG `https://aka.ms/service-management-reference-error` for resolving the error 
-Graph client request id: <request-id>. 
+BadRequest: ServiceManagementReference field is required for Update, but is missing in the request.
+Refer to the TSG `https://aka.ms/service-management-reference-error` for resolving the error
+Graph client request id: <request-id>.
 Graph request time: 2025-11-20T12:34:56.789Z.
 TraceID: <trace-id>
 ```
@@ -316,5 +316,5 @@ Use the following command to set the `AZURE_SERVICE_MANAGEMENT_REFERENCE` enviro
 azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <id>
 ```
 
-Replace `<id>` with the valid Service Tree ID. 
+Replace `<id>` with the valid Service Tree ID.
 If you don't provide a valid ID, the deployment will fail with the following error: `Value for ServiceManagementReference must be a valid GUID`.
