@@ -11,6 +11,14 @@
         "azure-pipelines-tasks"
       ],
       "extractVersion": "^(?<version>\\d+)"
+    },
+    {
+      "matchPackageNames": [
+        "Microsoft.ApplicationInsights.WorkerService",
+        "Microsoft.ApplicationInsights"
+      ],
+      "allowedVersions": "<3",
+      "description": "Microsoft.ApplicationInsights.WorkerService 3.0.0 is incompatible with the Azure Functions Worker. See https://github.com/Azure/azure-functions-dotnet-worker/issues/3322"
     }
   ],
   "azure-pipelines": {
