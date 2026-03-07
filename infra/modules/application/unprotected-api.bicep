@@ -16,7 +16,7 @@ param oauthTargetResource string
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2025-03-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -26,7 +26,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-previe
 
 // Named Values
 
-resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
+resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-03-01-preview' = {
   name: 'oauth-target-resource'
   parent: apiManagementService
   properties: {
@@ -37,7 +37,7 @@ resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedVal
 
 // Backends
 
-resource localhostBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = {
+resource localhostBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = {
   parent: apiManagementService
   name: 'localhost'
   properties: {
@@ -65,7 +65,7 @@ resource localhostBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-p
 
 // API
 
-resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
+resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2025-03-01-preview' = {
   name: 'unprotected-api'
   parent: apiManagementService
   properties: {
