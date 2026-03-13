@@ -1,18 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["replacements:all", "workarounds:all", "group:all"],
+  "extends": [
+    "replacements:all",
+    "workarounds:all",
+    "group:all"
+  ],
   "packageRules": [
     {
-      "matchDatasources": ["azure-pipelines-tasks"],
-      "extractVersion": "^(?<version>\\d+)"
-    },
-    {
-      "matchPackageNames": [
-        "Microsoft.ApplicationInsights.WorkerService",
-        "Microsoft.ApplicationInsights"
+      "matchDatasources": [
+        "azure-pipelines-tasks"
       ],
-      "allowedVersions": "<3",
-      "description": "Microsoft.ApplicationInsights.WorkerService 3.0.0 is incompatible with the Azure Functions Worker. See https://github.com/Azure/azure-functions-dotnet-worker/issues/3322"
+      "extractVersion": "^(?<version>\\d+)"
     }
   ],
   "azure-pipelines": {
