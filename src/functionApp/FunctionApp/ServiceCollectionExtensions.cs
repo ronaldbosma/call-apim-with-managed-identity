@@ -1,7 +1,6 @@
 using Azure.Core;
 using Azure.Identity;
 
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -11,9 +10,6 @@ namespace FunctionApp
     {
         public static IServiceCollection RegisterDependencies(this IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetryWorkerService()
-                    .ConfigureFunctionsApplicationInsights();
-
             services.AddOptionsWithValidateOnStart<ApiManagementOptions>()
                     .BindConfiguration(ApiManagementOptions.SectionKey)
                     .ValidateDataAnnotations();
