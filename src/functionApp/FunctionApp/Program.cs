@@ -24,9 +24,7 @@ builder.Logging.AddOpenTelemetry(logging =>
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing
         // Enables HttpClient instrumentation.
-        .AddHttpClientInstrumentation()
-        // Enable instrumentation for Azure SDK clients.
-        .AddSource("Azure.*"));
+        .AddHttpClientInstrumentation());
 
 builder.Services.AddOpenTelemetry().UseAzureMonitorExporter(options =>
 {
