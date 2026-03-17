@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using OpenTelemetry.Trace;
+
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
@@ -18,6 +20,13 @@ builder.Logging.AddOpenTelemetry(logging =>
     logging.IncludeFormattedMessage = true;
     logging.IncludeScopes = true;
 });
+
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        // Enables HttpClient instrumentation.
+        .AddHttpClientInstrumentation()
+        // Enable instrumentation for Azure SDK clients.
+        .AddSource("Azure.*"));
 
 builder.Services.AddOpenTelemetry().UseAzureMonitorExporter(options =>
 {
