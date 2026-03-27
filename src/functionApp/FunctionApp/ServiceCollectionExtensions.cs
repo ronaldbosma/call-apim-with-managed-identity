@@ -25,6 +25,8 @@ namespace FunctionApp
                 // This credential will use the Azure identity of the current user or
                 // the service principal that the application is running as to authenticate
                 // to Azure Monitor.
+                // Use a more specific credential in production scenarios. For best practices, see
+                // https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication/best-practices?tabs=aspdotnet
                 options.Credential = new DefaultAzureCredential();
             });
 
