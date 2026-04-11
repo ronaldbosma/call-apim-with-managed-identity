@@ -207,6 +207,8 @@ The pipeline consists of the following jobs:
 
   ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
 
+For draft PRs, only the 'Build, Verify and Package' job is executed to avoid deploying from work-in-progress branches. When the PR is marked ready for review, the workflow will trigger and execute all jobs.
+
 > [!NOTE]
 > An Azure DevOps pipeline is also included in [.azdo/pipelines/azure-dev.yml](.azdo/pipelines/azure-dev.yml) that implements the same jobs as the GitHub Actions workflow.
 
