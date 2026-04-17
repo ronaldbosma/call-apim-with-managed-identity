@@ -19,7 +19,7 @@ param appInsightsName string
 // Variables
 //=============================================================================
 
-var monitoringMetricsPublisher string = 'Monitoring Metrics Publisher'
+var monitoringMetricsPublisherRoleName string = 'Monitoring Metrics Publisher'
 
 //=============================================================================
 // Existing Resources
@@ -36,11 +36,11 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisher).id)
+  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisherRoleName).id)
   scope: appInsights
   properties: {
     #disable-next-line use-resource-id-functions
-    roleDefinitionId: roleDefinitions(monitoringMetricsPublisher).id
+    roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
     principalId: principalId
     principalType: principalType
   }
