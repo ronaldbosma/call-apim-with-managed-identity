@@ -51,10 +51,10 @@ stages:
               version: "10.0.x"
 
           # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
-          - task: NodeTool@0
+          - task: UseNode@1
             displayName: "Setup Node.js"
             inputs:
-              versionSpec: ">=25.0.0"
+              version: ">=25.0.0"
 
           - pwsh: |
               az version
@@ -214,10 +214,16 @@ stages:
           AZURE_TENANT_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_TENANT_ID'] ]
           AZURE_ENV_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
           AZURE_RESOURCE_GROUP: $[ dependencies.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
-          AZURE_API_MANAGEMENT_GATEWAY_URL: $[ dependencies.deploy.outputs['outputVars.AZURE_API_MANAGEMENT_GATEWAY_URL'] ]
-          AZURE_FUNCTION_APP_ENDPOINT: $[ dependencies.deploy.outputs['outputVars.AZURE_FUNCTION_APP_ENDPOINT'] ]
+          AZURE_API_MANAGEMENT_GATEWAY_URL: $[
+            dependencies.deploy.outputs['outputVars.AZURE_API_MANAGEMENT_GATEWAY_URL']
+            ]
+          AZURE_FUNCTION_APP_ENDPOINT: $[
+            dependencies.deploy.outputs['outputVars.AZURE_FUNCTION_APP_ENDPOINT']
+            ]
           AZURE_LOGIC_APP_NAME: $[ dependencies.deploy.outputs['outputVars.AZURE_LOGIC_APP_NAME'] ]
-          ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: $[ dependencies.deploy.outputs['outputVars.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI'] ]
+          ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: $[
+            dependencies.deploy.outputs['outputVars.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI']
+            ]
         steps:
           - task: UseDotNet@2
             displayName: "Setup .NET 10"
@@ -249,7 +255,8 @@ stages:
             inputs:
               testResultsFormat: "VSTest"
               testResultsFiles: "**/*.trx"
-              searchFolder: "$(System.DefaultWorkingDirectory)/artifacts/integration-tests/TestResults"
+              searchFolder: "$(System.DefaultWorkingDirectory)/artifacts/integration-tests/Te\
+                stResults"
               failTaskOnFailedTests: true
 
   # ------------------------------------------------------------
@@ -269,7 +276,8 @@ stages:
         variables:
           # Configure the deployed resource identifiers as environment variables so azd hooks can access them
           # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-          AZURE_ENV_ID: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
+          AZURE_ENV_ID: $[
+            stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
         steps:
           - task: setup-azd@1
             displayName: "Install azd"
