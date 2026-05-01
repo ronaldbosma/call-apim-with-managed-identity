@@ -69,7 +69,7 @@ stages:
               az bicep lint --file ./infra/main.bicep
             displayName: "Bicep Lint"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Validate Template"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -139,7 +139,7 @@ stages:
               azd config set auth.useAzCliAuth "true"
             displayName: "Configure azd to use Azure CLI Authentication"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Provision Infrastructure"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -155,7 +155,7 @@ stages:
               artifactName: "functionapp-package"
               targetPath: "./artifacts"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Deploy Function App"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -171,7 +171,7 @@ stages:
               artifactName: "logicapp-package"
               targetPath: "./artifacts"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Deploy Logic App"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -234,7 +234,7 @@ stages:
 
           # Use AzureCLI task to authenticate via service connection with federated credentials.
           # This is necessary for the integration test to access Azure resources if needed.
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Run Integration Tests"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -280,7 +280,7 @@ stages:
             displayName: "Configure azd to use Azure CLI Authentication"
 
           # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Cleanup Resources"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
