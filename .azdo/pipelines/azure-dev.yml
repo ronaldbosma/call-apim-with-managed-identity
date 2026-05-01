@@ -51,10 +51,10 @@ stages:
               version: "10.0.x"
 
           # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
-          - task: NodeTool@0
+          - task: UseNode@1
             displayName: "Setup Node.js"
             inputs:
-              versionSpec: ">=25.0.0"
+              version: ">=25.0.0"
 
           - pwsh: |
               az version
@@ -69,7 +69,7 @@ stages:
               az bicep lint --file ./infra/main.bicep
             displayName: "Bicep Lint"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Validate Template"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -139,7 +139,7 @@ stages:
               azd config set auth.useAzCliAuth "true"
             displayName: "Configure azd to use Azure CLI Authentication"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Provision Infrastructure"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -155,7 +155,7 @@ stages:
               artifactName: "functionapp-package"
               targetPath: "./artifacts"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Deploy Function App"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -171,7 +171,7 @@ stages:
               artifactName: "logicapp-package"
               targetPath: "./artifacts"
 
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Deploy Logic App"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -214,10 +214,16 @@ stages:
           AZURE_TENANT_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_TENANT_ID'] ]
           AZURE_ENV_ID: $[ dependencies.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
           AZURE_RESOURCE_GROUP: $[ dependencies.deploy.outputs['outputVars.AZURE_RESOURCE_GROUP'] ]
-          AZURE_API_MANAGEMENT_GATEWAY_URL: $[ dependencies.deploy.outputs['outputVars.AZURE_API_MANAGEMENT_GATEWAY_URL'] ]
-          AZURE_FUNCTION_APP_ENDPOINT: $[ dependencies.deploy.outputs['outputVars.AZURE_FUNCTION_APP_ENDPOINT'] ]
+          AZURE_API_MANAGEMENT_GATEWAY_URL: $[
+            dependencies.deploy.outputs['outputVars.AZURE_API_MANAGEMENT_GATEWAY_URL']
+            ]
+          AZURE_FUNCTION_APP_ENDPOINT: $[
+            dependencies.deploy.outputs['outputVars.AZURE_FUNCTION_APP_ENDPOINT']
+            ]
           AZURE_LOGIC_APP_NAME: $[ dependencies.deploy.outputs['outputVars.AZURE_LOGIC_APP_NAME'] ]
-          ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: $[ dependencies.deploy.outputs['outputVars.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI'] ]
+          ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: $[
+            dependencies.deploy.outputs['outputVars.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI']
+            ]
         steps:
           - task: UseDotNet@2
             displayName: "Setup .NET 10"
@@ -234,7 +240,7 @@ stages:
 
           # Use AzureCLI task to authenticate via service connection with federated credentials.
           # This is necessary for the integration test to access Azure resources if needed.
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Run Integration Tests"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
@@ -249,7 +255,8 @@ stages:
             inputs:
               testResultsFormat: "VSTest"
               testResultsFiles: "**/*.trx"
-              searchFolder: "$(System.DefaultWorkingDirectory)/artifacts/integration-tests/TestResults"
+              searchFolder: "$(System.DefaultWorkingDirectory)/artifacts/integration-tests/Te\
+                stResults"
               failTaskOnFailedTests: true
 
   # ------------------------------------------------------------
@@ -269,7 +276,8 @@ stages:
         variables:
           # Configure the deployed resource identifiers as environment variables so azd hooks can access them
           # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-          AZURE_ENV_ID: $[ stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
+          AZURE_ENV_ID: $[
+            stageDependencies.Deploy.deploy.outputs['outputVars.AZURE_ENV_ID'] ]
         steps:
           - task: setup-azd@1
             displayName: "Install azd"
@@ -280,7 +288,7 @@ stages:
             displayName: "Configure azd to use Azure CLI Authentication"
 
           # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
-          - task: AzureCLI@2
+          - task: AzureCLI@3
             displayName: "Cleanup Resources"
             inputs:
               azureSubscription: "$(AZURE_SERVICE_CONNECTION)"
