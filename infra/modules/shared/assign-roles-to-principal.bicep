@@ -39,7 +39,6 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
   name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisherRoleName).id)
   scope: appInsights
   properties: {
-    #disable-next-line use-resource-id-functions
     roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
     principalId: principalId
     principalType: principalType
