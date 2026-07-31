@@ -11,6 +11,7 @@ targetScope = 'subscription'
 
 import { getResourceName, generateInstanceId } from './functions/naming-conventions.bicep'
 import { apiManagementSettingsType, appInsightsSettingsType, functionAppSettingsType, logicAppSettingsType } from './types/settings.bicep'
+import { tagsType } from './types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -71,7 +72,7 @@ var storageAccountName string = getResourceName('storageAccount', environmentNam
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
 var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags { *: string } = {
+var tags tagsType = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-with-managed-identity'

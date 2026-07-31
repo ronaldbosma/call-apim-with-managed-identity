@@ -45,8 +45,8 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing 
 // Functions
 //=============================================================================
 
-func getAppRoleIdByValue(appRoles array, value string) string =>
-  first(filter(appRoles, (role) => role.value == value)).id
+func getAppRoleIdByValue(appRoles resourceInput<'Microsoft.Graph/applications@v1.0'>.appRoles, value string) string =>
+  first(filter(appRoles, (role) => role.value == value))!.id
 
 //=============================================================================
 // Resources
