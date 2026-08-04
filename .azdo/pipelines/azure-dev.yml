@@ -136,7 +136,7 @@ stages:
 
           # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
           - pwsh: |
-              azd config set auth.useAzCliAuth "true"
+              azd config set auth.useAzCliAuth "true" --debug
             displayName: "Configure azd to use Azure CLI Authentication"
 
           - task: AzureCLI@3
@@ -146,7 +146,7 @@ stages:
               scriptType: "pscore" # Use PowerShell Core because the azd hooks are written in PowerShell
               scriptLocation: "inlineScript"
               inlineScript: |
-                azd provision --no-prompt
+                azd provision --no-prompt --debug
 
           - task: DownloadPipelineArtifact@2
             displayName: "Download Function App Package"
@@ -162,7 +162,7 @@ stages:
               scriptType: "pscore"
               scriptLocation: "inlineScript"
               inlineScript: |
-                azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+                azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt --debug
 
           - task: DownloadPipelineArtifact@2
             displayName: "Download Logic App Package"
@@ -178,14 +178,14 @@ stages:
               scriptType: "pscore"
               scriptLocation: "inlineScript"
               inlineScript: |
-                azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+                azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt --debug
 
           # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
           - pwsh: |
               $variableNames = @(
                 "AZURE_TENANT_ID",
                 "AZURE_ENV_ID",
-                "AZURE_RESOURCE_GROUP", 
+                "AZURE_RESOURCE_GROUP",
                 "AZURE_API_MANAGEMENT_GATEWAY_URL",
                 "AZURE_FUNCTION_APP_ENDPOINT",
                 "AZURE_LOGIC_APP_NAME",
