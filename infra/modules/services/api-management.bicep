@@ -37,7 +37,7 @@ var publisherName string = 'admin@example.org'
 var publisherEmail string = 'admin@example.org'
 
 // This will disable the specified weak/insecure cipher suites (https://ciphersuite.info/)
-var customProperties resourceInput<'Microsoft.ApiManagement/service@2025-03-01-preview'>.properties.customProperties = {
+var customProperties resourceInput<'Microsoft.ApiManagement/service@2025-09-01-preview'>.properties.customProperties = {
   'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168': 'False'
   'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA': 'False'
   'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_256_CBC_SHA': 'False'
@@ -69,7 +69,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 
 // API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2025-03-01-preview' = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2025-09-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
@@ -109,7 +109,7 @@ module assignAppRolesToApimSystemAssignedIdentity '../entra-id/assign-app-roles.
 
 // Store the app insights connection string in a named value
 
-resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-03-01-preview' = {
+resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-09-01-preview' = {
   name: 'appinsights-connection-string'
   parent: apiManagementService
   properties: {
@@ -122,7 +122,7 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
 // - we need a logger that is connected to the App Insights instance
 // - we need diagnostics settings that specify what to log to the logger
 
-resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-03-01-preview' = {
+resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-09-01-preview' = {
   name: appInsightsName
   parent: apiManagementService
   properties: {
@@ -137,7 +137,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-03-
   }
 }
 
-resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2025-03-01-preview' = {
+resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2025-09-01-preview' = {
   name: 'applicationinsights' // The name of the diagnostics resource has to be applicationinsights, because that's the logger type we chose
   parent: apiManagementService
   properties: {
