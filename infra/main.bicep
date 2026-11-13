@@ -57,7 +57,7 @@ var appInsightsSettings appInsightsSettingsType = {
 var functionAppSettings functionAppSettingsType = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
-  netFrameworkVersion: 'v10.0'
+  runtimeVersion: '10.0'
 }
 
 var logicAppSettings logicAppSettingsType = {
@@ -128,6 +128,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
@@ -170,7 +171,9 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
   scope: resourceGroup
   params: {
     principalId: deployer().objectId
+    isAdmin: true
     appInsightsName: appInsightsSettings.appInsightsName
+    storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights

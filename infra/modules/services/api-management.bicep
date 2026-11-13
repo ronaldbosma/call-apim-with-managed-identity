@@ -25,6 +25,9 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
+@description('Name of the storage account that will be used by the Function App')
+param storageAccountName string
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -94,6 +97,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
     principalId: apiManagementService.identity.principalId
     principalType: 'ServicePrincipal'
     appInsightsName: appInsightsName
+    storageAccountName: storageAccountName
   }
 }
 

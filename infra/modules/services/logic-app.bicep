@@ -140,6 +140,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
     principalId: logicApp.identity.principalId
     principalType: 'ServicePrincipal'
     appInsightsName: appInsightsName
+    storageAccountName: storageAccountName
   }
 }
 
