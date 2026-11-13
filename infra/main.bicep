@@ -128,6 +128,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
@@ -170,7 +171,9 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
   scope: resourceGroup
   params: {
     principalId: deployer().objectId
+    isAdmin: true
     appInsightsName: appInsightsSettings.appInsightsName
+    storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights

@@ -159,6 +159,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
     appInsightsName: appInsightsName
+    storageAccountName: storageAccountName
   }
 }
 
