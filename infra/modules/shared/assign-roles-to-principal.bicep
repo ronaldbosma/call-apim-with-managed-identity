@@ -20,6 +20,7 @@ param appInsightsName string
 //=============================================================================
 
 var monitoringMetricsPublisherRoleName string = 'Monitoring Metrics Publisher'
+var storageBlobDataContributorRoleName string = 'Storage Blob Data Contributor'
 
 //=============================================================================
 // Existing Resources
@@ -40,6 +41,18 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
   scope: appInsights
   properties: {
     roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
+    principalId: principalId
+    principalType: principalType
+  }
+}
+
+// Assign Storage Account roles to the principal
+
+resource assignStorageBlobDataContributorRoleToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(principalId, appInsights.id, roleDefinitions(storageBlobDataContributorRoleName).id)
+  scope: appInsights
+  properties: {
+    roleDefinitionId: roleDefinitions(storageBlobDataContributorRoleName).id
     principalId: principalId
     principalType: principalType
   }
