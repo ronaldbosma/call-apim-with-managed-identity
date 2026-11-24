@@ -117,7 +117,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
-@retryOn(['DeploymentOperationFailed']) // Retry on failure because the app registration might not be immediately available after creation
+@retryOn(['BadRequest']) // Retry on failure because the app registration might not be immediately available after creation
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
