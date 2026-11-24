@@ -54,7 +54,7 @@ func getAppRoleIdByValue(appRoles resourceInput<'Microsoft.Graph/applications@v1
 // Resources
 //=============================================================================
 
-@retryOn(['BadRequest']) // Retry on failure because the app registration might not be immediately available after creation
+@retryOn(['BadRequest']) // Retry on failure because a service principal might not be immediately available after creation
 resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [
   for role in rolesToAssign: {
     resourceId: apimServicePrincipal.id
