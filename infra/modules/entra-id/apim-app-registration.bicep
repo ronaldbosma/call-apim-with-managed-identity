@@ -117,6 +117,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
+@retryOn(['BadRequest']) // Retry on failure because the app registration might not be immediately available after creation
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
@@ -130,6 +131,7 @@ resource azureCliServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = if 
 
 // Add OAuth2 permission grant to allow the Azure CLI service principal to access the API Management app registration impersonating a user
 // NOTE: The user still needs to be granted app roles in order to access the API
+@retryOn(['BadRequest']) // Retry on failure because the service principal might not be immediately available after creation
 resource oauth2PermissionGrantForAzureCli 'Microsoft.Graph/oauth2PermissionGrants@v1.0' = if (allowApiAccessForUsers) {
   clientId: azureCliServicePrincipal!.id
   resourceId: apimServicePrincipal.id
