@@ -131,6 +131,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    apimAppRegistration
     appInsights
   ]
 }
@@ -146,6 +147,7 @@ module functionApp 'modules/services/function-app.bicep' = {
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    apimAppRegistration
     appInsights
     storageAccount
   ]
@@ -162,6 +164,7 @@ module logicApp 'modules/services/logic-app.bicep' = {
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    apimAppRegistration
     appInsights
     storageAccount
   ]
