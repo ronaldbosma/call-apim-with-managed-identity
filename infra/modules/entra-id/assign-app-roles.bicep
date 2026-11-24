@@ -33,10 +33,12 @@ var rolesToAssign string[] = [
 // Existing Resources
 //=============================================================================
 
+@retryOn(['NotFound']) // Retry on failure because the app registration might not be immediately available after creation
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
   uniqueName: apimAppRegistrationName
 }
 
+@retryOn(['NotFound']) // Retry on failure because the service principal might not be immediately available after creation
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
   appId: apimAppRegistration.appId
 }
@@ -52,6 +54,7 @@ func getAppRoleIdByValue(appRoles resourceInput<'Microsoft.Graph/applications@v1
 // Resources
 //=============================================================================
 
+@retryOn(['BadRequest']) // Retry on failure because the app registration might not be immediately available after creation
 resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [
   for role in rolesToAssign: {
     resourceId: apimServicePrincipal.id
