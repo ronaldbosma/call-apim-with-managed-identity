@@ -44,25 +44,23 @@ stages:
           #     Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression
           #   displayName: 'Install azd'
 
+          - pwsh: |
+              azd ext install azure.logicappsstandard
+            displayName: "Setup Azure Logic Apps Standard azd extension"
+
           - task: UseDotNet@2
             displayName: "Setup .NET 11"
             inputs:
               packageType: "sdk"
               version: "11.0.x"
 
-          # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
-          - task: UseNode@1
-            displayName: "Setup Node.js"
-            inputs:
-              version: ">=25.0.0"
-
           - pwsh: |
               az version
               az bicep version
               azd version
+              Write-Host "azd extensions:"
+              azd ext list
               Write-Host ".NET SDK Version: $(dotnet --version)"
-              Write-Host "Node.js Version: $(node --version)"
-              Write-Host "npm Version: $(npm --version)"
             displayName: "Print Tool Versions"
 
           - pwsh: |
@@ -133,6 +131,10 @@ stages:
         steps:
           - task: setup-azd@1
             displayName: "Install azd"
+
+          - pwsh: |
+              azd ext install azure.logicappsstandard
+            displayName: "Setup Azure Logic Apps Standard azd extension"
 
           # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
           - pwsh: |
@@ -281,6 +283,10 @@ stages:
         steps:
           - task: setup-azd@1
             displayName: "Install azd"
+
+          - pwsh: |
+              azd ext install azure.logicappsstandard
+            displayName: "Setup Azure Logic Apps Standard azd extension"
 
           # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
           - pwsh: |

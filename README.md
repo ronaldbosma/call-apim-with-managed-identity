@@ -57,9 +57,9 @@ Before you can deploy this template, make sure you have the following tools inst
   Installing `azd` also installs the following tools:
   - [GitHub CLI](https://cli.github.com)
   - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
+  - Required extensions:
+    - [Azure Logic Apps Standard azd extension](https://github.com/Azure/azure-dev/tree/main/cli/azd/extensions/azure.logicappsstandard)
 - [.NET 11 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/11.0)
-- [npm CLI](https://nodejs.org/)
-  _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - This template includes several hooks that run at different stages of the deployment process and require the following tools. For more details, see [Hooks](#hooks).
   - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
   - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
@@ -81,6 +81,8 @@ Once the prerequisites are installed on your machine, you can deploy this templa
    ```
 
    When prompted, specify the name of the environment (for example, `managedidentity`). The maximum length is 32 characters.
+
+   The Azure Logic Apps Standard extension (`azure.logicappsstandard`) will be installed automatically.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription using the **Azure Developer CLI** _(if you haven't already)_.
 
